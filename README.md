@@ -1,0 +1,2 @@
+# lupus-sync
+PAGINA RESPONSIVE
