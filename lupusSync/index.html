@@ -1,0 +1,2596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LupusSync - Plataforma Médica de Seguimiento de Lupus</title>
+  
+  <!-- Tipografía Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Estilos LupusSync -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- PANTALLA DE AUTENTICACIÓN (LOGIN / REGISTRO) - OCULTA CUANDO HAY SESIÓN -->
+  <div id="authScreen" class="auth-wrapper" style="display: none;">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="brand-logo" style="justify-content: center; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 12px;">
+          <svg class="brand-logo-svg" viewBox="-12 -12 124 124" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 44px; height: 44px;">
+            <defs>
+              <linearGradient id="purpleGradAuth" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7C3AED" />
+                <stop offset="100%" stop-color="#A78BFA" />
+              </linearGradient>
+              <linearGradient id="cyanGradAuth" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00A3C4" />
+                <stop offset="100%" stop-color="#06B6D4" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="32" stroke="url(#cyanGradAuth)" stroke-width="3" stroke-dasharray="160 30" transform="rotate(45 50 50)" />
+            <path d="M 28 50 A 22 22 0 0 1 72 50" stroke="url(#purpleGradAuth)" stroke-width="3" fill="none" stroke-linecap="round" />
+            <polygon points="70,44 77,50 70,56" fill="#7C3AED" />
+            <path d="M 72 50 A 22 22 0 0 1 28 50" stroke="url(#cyanGradAuth)" stroke-width="3" fill="none" stroke-linecap="round" />
+            <polygon points="30,56 23,50 30,44" fill="#00A3C4" />
+            <circle cx="20" cy="44" r="3" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2" />
+            <circle cx="80" cy="44" r="3" fill="#FFFFFF" stroke="#00A3C4" stroke-width="2" />
+            <circle cx="50" cy="31" r="3.5" fill="#7C3AED" />
+            <path d="M 50 38 C 40 22 24 28 26 44 C 28 58 46 54 50 63 C 54 54 72 58 74 44 C 76 28 60 22 50 38 Z" fill="url(#purpleGradAuth)" opacity="0.88" />
+            <path d="M 50 48 C 42 36 30 38 32 48 C 34 56 46 53 50 58 C 54 53 66 56 68 48 C 70 38 58 36 50 48 Z" fill="none" stroke="#FFFFFF" stroke-width="1.8" />
+          </svg>
+          <div style="text-align: left;">
+            <div class="brand-title-gradient">LupusSync</div>
+            <div class="brand-sub-cyan">Ecosistema eHealth</div>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Plataforma médica para pacientes con Lupus Eritematoso Sistémico
+        </p>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+        <button type="button" class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthTab('register')">Registrar Paciente</button>
+      </div>
+
+      <div class="auth-body">
+        <!-- FORMULARIO DE LOGIN -->
+        <form id="loginForm" onsubmit="handleAuthLogin(event)">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Correo Electrónico</label>
+            <input type="email" id="loginEmail" class="form-control" placeholder="paciente@ejemplo.com" required value="lucia.fernandez@lupussync.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required value="123456">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <span>Ingresar a LupusSync</span>
+          </button>
+        </form>
+
+        <!-- FORMULARIO DE REGISTRO (CON CAMPOS DE LA IMAGEN: NOMBRE, DNI, DIRECCIÓN, TELÉFONO) -->
+        <form id="registerForm" onsubmit="handleAuthRegister(event)" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="regNombre">Nombre y Apellido</label>
+            <input type="text" id="regNombre" class="form-control" placeholder="Ej: Lucía Fernández" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="regDni">DNI / Documento</label>
+              <input type="text" id="regDni" class="form-control" placeholder="Ej: 38.452.120" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regTel">Teléfono</label>
+              <input type="tel" id="regTel" class="form-control" placeholder="Ej: +54 11 4821-9932" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regDireccion">Dirección</label>
+            <input type="text" id="regDireccion" class="form-control" placeholder="Ej: Av. Corrientes 3450, Piso 4 B, CABA" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="regTipoLupus">Tipo de Lupus</label>
+              <select id="regTipoLupus" class="form-control">
+                <option value="Lupus Eritematoso Sistémico (LES)">Lupus Eritematoso Sistémico (LES)</option>
+                <option value="Lupus Eritematoso Cutáneo (LEC)">Lupus Cutáneo (Discoide/Subagudo)</option>
+                <option value="Lupus con Nefritis Lúpica">LES con Nefritis Lúpica</option>
+                <option value="Lupus Inducido por Drogas">Lupus Inducido por Fármacos</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regGrupoSanguineo">Grupo Sanguíneo</label>
+              <select id="regGrupoSanguineo" class="form-control">
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="0+">0+</option>
+                <option value="0-">0-</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Correo Electrónico</label>
+            <input type="email" id="regEmail" class="form-control" placeholder="nuevo.paciente@correo.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Contraseña</label>
+            <input type="password" id="regPassword" class="form-control" placeholder="Al menos 6 caracteres" required minlength="6">
+          </div>
+
+          <!-- SECCIÓN: DATOS MÉDICOS Y SIGNOS VITALES DEL PACIENTE -->
+          <div class="auth-section-divider">
+            <span>🩺 Tus Datos Médicos y Signos Vitales</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="regPeso">Peso Corporal (kg)</label>
+              <input type="number" step="0.1" id="regPeso" class="form-control" placeholder="Ej: 62.5" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPresion">Presión Arterial (mmHg)</label>
+              <input type="text" id="regPresion" class="form-control" placeholder="Ej: 120/80" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="regPulso">Pulso / Frecuencia Cardíaca (lpm)</label>
+              <input type="number" id="regPulso" class="form-control" placeholder="Ej: 72" value="72">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regTemperatura">Temperatura (°C)</label>
+              <input type="number" step="0.1" id="regTemperatura" class="form-control" placeholder="Ej: 36.5" value="36.5">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="regZonaCuidar">Zona a cuidar con mayor prioridad</label>
+              <select id="regZonaCuidar" class="form-control">
+                <option value="Riñones (Nefritis Lúpica)">Riñones (Nefritis Lúpica)</option>
+                <option value="Piel y Rostro (Eritema Malar / Fotosensibilidad)">Piel y Rostro (Fotosensibilidad)</option>
+                <option value="Articulaciones (Poliartritis / Manos)">Articulaciones (Manos / Rodillas)</option>
+                <option value="Ojos y Retina (Vigilancia Antipalúdicos)">Ojos y Retina (Fondo de Ojo)</option>
+                <option value="Corazón y Vasos Sanguíneos">Corazón y Vasos Sanguíneos</option>
+                <option value="Salud Cognitiva / Lupus Fog">Salud Cognitiva (Lupus Fog)</option>
+                <option value="Cuidado Integral General">Cuidado Integral General</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regAlergias">Alergias Conocidas</label>
+              <input type="text" id="regAlergias" class="form-control" placeholder="Ej: Sulfas, Penicilina o Ninguna" value="Sin alergias conocidas">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regMedico">Médico de Cabecera / Centro de Atención</label>
+            <input type="text" id="regMedico" class="form-control" placeholder="Ej: Dra. Ferreira (Hospital Posadas)" value="Hospital Nacional Profesor Alejandro Posadas">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+            <span>Crear Ficha y Registrarme</span>
+          </button>
+        </form>
+
+        <!-- ACCESO RÁPIDO MODO DEMO -->
+        <div class="demo-account-box">
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.35rem;">
+            ⚡ Acceso Rápido de Prueba (Demo)
+          </div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.65rem;">
+            Explora la aplicación inmediatamente con los datos clínicos precargados de Lucía Fernández (LES).
+          </p>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="enterDemoMode()" style="width: 100%;">
+            <span>Entrar como Paciente Demo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APLICACIÓN PRINCIPAL (VISIBLE TRAS LOGIN) -->
+  <div id="mainApp" class="app-container">
+
+    <!-- SIDEBAR DE NAVEGACIÓN (ESCRITORIO / TABLET) -->
+    <aside class="sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand-logo" onclick="switchTab('historia'); return false;" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+          <svg class="brand-logo-svg" viewBox="-12 -12 124 124" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7C3AED" />
+                <stop offset="100%" stop-color="#A78BFA" />
+              </linearGradient>
+              <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00A3C4" />
+                <stop offset="100%" stop-color="#06B6D4" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="32" stroke="url(#cyanGrad)" stroke-width="3" stroke-dasharray="160 30" transform="rotate(45 50 50)" />
+            <path d="M 28 50 A 22 22 0 0 1 72 50" stroke="url(#purpleGrad)" stroke-width="3" fill="none" stroke-linecap="round" />
+            <polygon points="70,44 77,50 70,56" fill="#7C3AED" />
+            <path d="M 72 50 A 22 22 0 0 1 28 50" stroke="url(#cyanGrad)" stroke-width="3" fill="none" stroke-linecap="round" />
+            <polygon points="30,56 23,50 30,44" fill="#00A3C4" />
+            <circle cx="20" cy="44" r="3" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2" />
+            <circle cx="80" cy="44" r="3" fill="#FFFFFF" stroke="#00A3C4" stroke-width="2" />
+            <circle cx="50" cy="31" r="3.5" fill="#7C3AED" />
+            <path d="M 50 38 C 40 22 24 28 26 44 C 28 58 46 54 50 63 C 54 54 72 58 74 44 C 76 28 60 22 50 38 Z" fill="url(#purpleGrad)" opacity="0.88" />
+            <path d="M 50 48 C 42 36 30 38 32 48 C 34 56 46 53 50 58 C 54 53 66 56 68 48 C 70 38 58 36 50 48 Z" fill="none" stroke="#FFFFFF" stroke-width="1.8" />
+          </svg>
+          <div class="brand-text-block">
+            <span class="brand-title-gradient">LupusSync</span>
+            <span class="brand-sub-cyan">Ecosistema eHealth</span>
+          </div>
+        </a>
+        <button class="btn-icon-action mobile-menu-toggle" onclick="toggleMobileSidebar()" title="Cerrar Menú">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Módulos Principales</div>
+
+        <!-- 1. HISTORIA CLÍNICA -->
+        <button class="nav-btn active" id="nav-btn-historia" data-tab="historia" onclick="switchTab('historia')">
+          <span class="nav-icon">🩺</span>
+          <span>Historia Clínica</span>
+        </button>
+
+        <!-- 2. PLAN FARMACOLÓGICO -->
+        <button class="nav-btn" id="nav-btn-medicacion" data-tab="medicacion" onclick="switchTab('medicacion')">
+          <span class="nav-icon">💊</span>
+          <span>Plan Farmacológico</span>
+          <span class="nav-badge" id="sidebarMedCount">5</span>
+        </button>
+
+        <!-- 3. AGENDA DE TURNOS -->
+        <button class="nav-btn" id="nav-btn-turnos" data-tab="turnos" onclick="switchTab('turnos')">
+          <span class="nav-icon">📅</span>
+          <span>Agenda de Turnos</span>
+          <span class="nav-badge" id="sidebarTurnosCount">4</span>
+        </button>
+
+        <!-- 4. GUÍA DE FÁRMACOS -->
+        <button class="nav-btn" id="nav-btn-guia" data-tab="guia" onclick="switchTab('guia')">
+          <span class="nav-icon">📖</span>
+          <span>Guía de Fármacos</span>
+        </button>
+
+        <!-- 5. HISTORIAL Y SÍNTOMAS -->
+        <button class="nav-btn" id="nav-btn-historial" data-tab="historial" onclick="switchTab('historial')">
+          <span class="nav-icon">📈</span>
+          <span>Historial y Brotes</span>
+        </button>
+
+        <!-- 6. NUEVA SECCIÓN: ZONAS ESPECIALES A CUIDAR -->
+        <button class="nav-btn" id="nav-btn-zonas" data-tab="zonas" onclick="switchTab('zonas')">
+          <span class="nav-icon">🛡️</span>
+          <span>Zonas Especiales a Cuidar</span>
+        </button>
+
+        <div class="nav-section-title">Urgencias y Sistema</div>
+
+        <!-- 7. GUARDIA DE EMERGENCIAS -->
+        <button class="nav-btn btn-sos" id="nav-btn-emergencias" data-tab="emergencias" onclick="switchTab('emergencias')">
+          <span class="nav-icon">🚨</span>
+          <span>Guardia de Emergencias</span>
+        </button>
+
+        <!-- 8. BASE DE DATOS JSON -->
+        <button class="nav-btn" id="nav-btn-config" data-tab="config" onclick="switchTab('config')">
+          <span class="nav-icon">📁</span>
+          <span>Base de Datos JSON</span>
+        </button>
+      </nav>
+
+      <!-- PERFIL RÁPIDO FOOTER -->
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-sm" onclick="openModal('modalPublicarWeb')" style="width: 100%; margin-bottom: 10px; font-size: 11.5px; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 10px; background: #FFFFFF;">
+          <span>🌐 Subir / Abrir en Celular</span>
+        </button>
+        <div class="user-quick-profile" onclick="openEditProfileModal()">
+          <div class="user-avatar" id="sidebarAvatar">LF</div>
+          <div class="user-info-text">
+            <div class="user-name" id="sidebarUserName">Lucía Fernández</div>
+            <div class="user-condition" id="sidebarUserDiag">LES • A+</div>
+          </div>
+          <span style="color: var(--text-light); font-size: 0.8rem;" title="Editar Perfil">✏️</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- WRAPPER DE CONTENIDO -->
+    <div class="main-wrapper">
+
+      <!-- TOP NAVBAR -->
+      <header class="top-navbar">
+        <div class="nav-left-group">
+          <button class="mobile-menu-toggle" onclick="toggleMobileSidebar()" aria-label="Abrir Menú">☰</button>
+          <div class="page-headline">
+            <h1 id="topPageTitle">Historia Clínica</h1>
+            <p id="topPageSubtitle">Ficha médica completa y antecedentes clínicos</p>
+          </div>
+        </div>
+
+        <div class="nav-right-actions">
+          <!-- BOTÓN ABRIR EN CELULAR / SUBIR A INTERNET -->
+          <button class="btn btn-primary btn-sm" onclick="openModal('modalPublicarWeb')" title="Abrir en celular o subir a internet" style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px;">
+            <span>🌐 Abrir en Celular</span>
+          </button>
+
+          <!-- ESTADO DE LA BASE DE DATOS JSON -->
+          <div class="db-status-pill local-mode" id="dbStatusBadge" onclick="switchTab('config')" title="Click para gestionar los archivos JSON">
+            <span class="status-dot pulse" id="dbStatusDot"></span>
+            <span id="dbStatusText">Archivos JSON</span>
+          </div>
+
+          <!-- BOTÓN IMPRIMIR / EXPORTAR -->
+          <button class="btn-icon-action" onclick="window.print()" title="Imprimir / Exportar a PDF">
+            🖨️
+          </button>
+
+          <!-- BOTÓN CERRAR SESIÓN -->
+          <button class="btn-icon-action" onclick="logoutCurrentSession()" title="Cerrar Sesión">
+            🚪
+          </button>
+        </div>
+      </header>
+
+      <!-- ÁREA DE CONTENIDO (VISTAS DINÁMICAS) -->
+      <main class="content-area">
+
+        <!-- ===================================================================
+             1. TAB: HISTORIA CLÍNICA (VISTA PRINCIPAL DEL PACIENTE)
+             =================================================================== -->
+        <div class="tab-pane active" id="pane-historia">
+          <!-- HERO BANNER DE PACIENTE (CON DATOS DE LA IMAGEN: NOMBRE, DNI, DIRECCIÓN, TELÉFONO) -->
+          <div class="patient-hero-card">
+            <div class="patient-hero-grid">
+              <div class="patient-big-avatar" id="heroAvatar">LF</div>
+              <div>
+                <div class="patient-meta-badges">
+                  <span class="badge-hero" id="heroBadgeDiag">Lupus Eritematoso Sistémico (LES)</span>
+                  <span class="badge-hero" id="heroBadgeBlood">Grupo: A+</span>
+                  <span class="badge-hero" id="heroBadgeAge">32 Años</span>
+                </div>
+                <h2 class="patient-meta-title" id="heroNombre">Lucía Belén Fernández</h2>
+                
+                <div class="patient-contact-strip">
+                  <div class="contact-item-hero">
+                    <span class="contact-label-hero">DNI / Documento</span>
+                    <span class="contact-val-hero" id="heroDni">38.452.120</span>
+                  </div>
+                  <div class="contact-item-hero">
+                    <span class="contact-label-hero">Teléfono de Contacto</span>
+                    <span class="contact-val-hero" id="heroTel">+54 11 4821-9932</span>
+                  </div>
+                  <div class="contact-item-hero">
+                    <span class="contact-label-hero">Dirección</span>
+                    <span class="contact-val-hero" id="heroDireccion">Av. Corrientes 3450, Piso 4 B, CABA</span>
+                  </div>
+                  <div class="contact-item-hero">
+                    <span class="contact-label-hero">Médico de Cabecera</span>
+                    <span class="contact-val-hero" id="heroDoctor">Dra. Leila Romina Ferreira (Reumatología - Hospital Posadas)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-actions">
+                <button class="btn btn-white btn-sm" onclick="openEditProfileModal()">
+                  <span>✏️ Editar Ficha</span>
+                </button>
+                <button class="btn btn-sm" style="background: rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.3);" onclick="switchTab('emergencias')">
+                  <span>🚨 Ficha de Guardia</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIGNOS VITALES RECIENTES -->
+          <div class="grid-4" style="margin-bottom: 1.5rem;">
+            <div class="stat-card">
+              <div class="stat-icon purple">💓</div>
+              <div class="stat-data">
+                <div class="stat-label">Presión Arterial</div>
+                <div class="stat-value" id="vitalPresion">118/76</div>
+                <div class="stat-sub">mmHg • Normotensa</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon blue">🫀</div>
+              <div class="stat-data">
+                <div class="stat-label">Frecuencia Cardíaca</div>
+                <div class="stat-value" id="vitalPulso">72</div>
+                <div class="stat-sub">lpm • Rítmico</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon rose">🌡️</div>
+              <div class="stat-data">
+                <div class="stat-label">Temperatura</div>
+                <div class="stat-value" id="vitalTemp">36.5 °C</div>
+                <div class="stat-sub">Afebril</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon emerald">⚖️</div>
+              <div class="stat-data">
+                <div class="stat-label">Peso Corporal</div>
+                <div class="stat-value" id="vitalPeso">61.5 kg</div>
+                <div class="stat-sub">IMC: 22.4 (Normal)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DETALLES CLÍNICOS Y ANTECEDENTES -->
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">📋</div>
+                  <div>
+                    <h3 class="card-title">Compromiso Orgánico y Criterios</h3>
+                    <p class="card-subtitle">Manifestaciones documentadas de la enfermedad</p>
+                  </div>
+                </div>
+              </div>
+              <div id="organicManifestationsList" style="display: flex; flex-direction: column; gap: 0.65rem;">
+                <!-- Dinámico -->
+              </div>
+              <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--danger); margin-bottom: 0.25rem;">
+                  ⚠️ Alergias Medicamentosas Registradas:
+                </div>
+                <div id="patientAllergies" style="font-size: 0.85rem; color: var(--text-main); font-weight: 600;">
+                  Sulfamidas (reacción cutánea severa), Penicilina (intolerancia digestiva)
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <div class="card-icon" style="background-color: var(--secondary-light); color: var(--secondary);">🔬</div>
+                  <div>
+                    <h3 class="card-title">Últimos Análisis de Laboratorio</h3>
+                    <p class="card-subtitle">Serología, sedimento urinario y complementos</p>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="clinical-table">
+                  <thead>
+                    <tr>
+                      <th>Parámetro</th>
+                      <th>Valor</th>
+                      <th>Rango Normal</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="labResultsTableBody">
+                    <!-- Dinámico -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- EVOLUCIÓN CLÍNICA Y NOTAS REUMATOLÓGICAS -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">📝</div>
+                <div>
+                  <h3 class="card-title">Última Evolución Médica y Recomendaciones</h3>
+                  <p class="card-subtitle">Indicaciones dadas en el último control por Reumatología</p>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-secondary" onclick="openEditEvolucionModal()">✏️ Actualizar Nota</button>
+            </div>
+            <p id="patientEvolucionText" style="font-size: 0.925rem; line-height: 1.6; color: var(--text-main); background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary);">
+              Cargando evolución médica...
+            </p>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             2. TAB: PLAN FARMACOLÓGICO (MEDICACIÓN ACTIVA Y VALIDACIÓN)
+             =================================================================== -->
+        <div class="tab-pane" id="pane-medicacion">
+          
+          <!-- MÓDULO CLIMÁTICO Y CUIDADOS AMBIENTALES -->
+          <div class="weather-card">
+            <div class="weather-header">
+              <span class="weather-location">📍 San Miguel (E.E.S.T. N° 2) • Hospital Posadas</span>
+              <span class="weather-badge-pill">Monitoreo Ambiental</span>
+            </div>
+            <div class="weather-main">
+              <div class="temp-display">
+                <span class="temp-val">15°</span>
+                <span class="temp-unit">C</span>
+                <span style="font-size: 26px; margin-left: 8px;">☁️</span>
+              </div>
+              <div class="weather-metrics">
+                <div class="metric-item">Humedad: <span class="metric-val">84%</span></div>
+                <div class="metric-item">Índice UV: <span class="metric-val" style="color: var(--primary-violet);">Moderado (UV 3)</span></div>
+              </div>
+            </div>
+            <div class="weather-care-box">
+              <strong>⚠️ Cuidados especiales para salir hoy:</strong><br>
+              • <strong>Foto-protección:</strong> Aplica protector solar FPS 50+ (la radiación UV atraviesa las nubes y desencadena brotes de eritema).<br>
+              • <strong>Humedad elevada (84%):</strong> Puede aumentar la rigidez articular. Mantén abrigadas tus manos y cuello al salir.
+            </div>
+          </div>
+
+          <!-- TARJETA RESUMEN DE ESTADO CLÍNICO -->
+          <div class="card" style="background: linear-gradient(135deg, #FAF5FF, #F0F9FF); border-color: #E9D5FF; margin-bottom: 1.25rem;">
+            <div class="card-header" style="border-bottom: none; padding-bottom: 0;">
+              <div class="card-title-group">
+                <span class="card-title" style="color: var(--primary-violet);">📊 Estado Clínico Hoy</span>
+              </div>
+              <span style="font-size: 11px; background: #E9D5FF; color: #6B21A8; padding: 3px 10px; border-radius: 12px; font-weight: 700;">Estable</span>
+            </div>
+            <div class="quick-grid">
+              <div class="grid-box">
+                <div class="grid-val" id="adherencePercent">95%</div>
+                <div class="grid-lbl">Adherencia Medicación</div>
+              </div>
+              <div class="grid-box">
+                <div class="grid-val" style="color: var(--accent-cyan);">5 mg</div>
+                <div class="grid-lbl">Dosis Meprednisona</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN TRATAMIENTO Y CRUCE DE ESPECIALISTAS -->
+          <div class="card" style="margin-bottom: 1.25rem;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">💊</div>
+                <div>
+                  <h3 class="card-title">Plan Farmacológico y Validación</h3>
+                  <p class="card-subtitle">Registra y valida la compatibilidad entre recetas de Reumatología y otros especialistas (Hospital Posadas).</p>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAddMedModal()">
+                <span>+ Agregar Medicamento</span>
+              </button>
+            </div>
+
+            <!-- FILTRO DE HORARIOS DE TOMA -->
+            <div class="sub-filter-chips" style="padding: 0 1rem; margin-top: 0.75rem; margin-bottom: 0.5rem;">
+              <button type="button" class="sub-chip-btn active" onclick="setMedScheduleFilter('todas', this)">Todas las tomas</button>
+              <button type="button" class="sub-chip-btn" onclick="setMedScheduleFilter('mañana', this)">🌅 Mañana (08:00 hs)</button>
+              <button type="button" class="sub-chip-btn" onclick="setMedScheduleFilter('tarde', this)">☀️ Almuerzo (13:00 hs)</button>
+              <button type="button" class="sub-chip-btn" onclick="setMedScheduleFilter('noche', this)">🌙 Noche / Cena (21:00 hs)</button>
+            </div>
+
+            <!-- LISTA DE MEDICAMENTOS ACTIVOS (RENDER DINÁMICO CON ESTILO MED-ROW) -->
+            <div class="daily-checklist-container" id="medicationsListContainer">
+              <!-- Render dinámico con botones TOMADA / PENDIENTE -->
+            </div>
+
+            <!-- MOTOR DE FARMACOVIGILANCIA Y CRUCE DE ESPECIALISTAS (ETAPA 2) -->
+            <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <div>
+                  <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 0.25rem;">
+                    🛡️ Módulo de Farmacovigilancia: Validación Cruzada en Tiempo Real
+                  </h4>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">
+                    Motor de validación entre prescripciones de Reumatología y Psiquiatría para evitar interacciones graves (Dra. Leila Romina Ferreira - Hosp. Posadas).
+                  </p>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" onclick="analizarCruceEspecialistas(this)">
+                  <span>🔍 Validar Compatibilidad</span>
+                </button>
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="reuma-med">👨‍⚕️ Prescripción de Reumatología:</label>
+                  <select id="reuma-med" class="custom-select" onchange="analizarCruceEspecialistas(this)">
+                    <option value="hidroxi">Hidroxicloroquina (Plaquinol 200mg - Base Inmunomoduladora)</option>
+                    <option value="corticoide">Meprednisona / Prednisona (Corticosteroide)</option>
+                    <option value="micofenolato">Micofenolato Mofetilo (CellCept - Inmunosupresor renal)</option>
+                    <option value="metotrexato">Metotrexato (MTX Semanal - Inmunosupresor articular)</option>
+                    <option value="azatioprina">Azatioprina (Imuran - Inmunosupresor de mantenimiento)</option>
+                    <option value="belimumab">Belimumab (Benlysta - Terapia Biológica)</option>
+                    <option value="anifrolumab">Anifrolumab (Saphnelo - Terapia Biológica Anti-IFN)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="psy-med">🧠 Prescripción Psiquiatría / Otros Médicos:</label>
+                  <select id="psy-med" class="custom-select" onchange="analizarCruceEspecialistas(this)">
+                    <option value="ninguno">-- Sin fármaco adicional concomitante --</option>
+                    <option value="escitalopram">Escitalopram / Citalopram (Antidepresivo ISRS)</option>
+                    <option value="sertralina">Sertralina (Antidepresivo ISRS)</option>
+                    <option value="clonazepam">Clonazepam / Lorazepam (Ansiolítico Benzodiacepina)</option>
+                    <option value="fluoxetina">Fluoxetina (Antidepresivo ISRS)</option>
+                    <option value="litio">Carbonato de Litio (Estabilizador del ánimo)</option>
+                    <option value="omeprazol">Omeprazol / Pantoprazol (Protector Gástrico)</option>
+                    <option value="calcio_d">Calcio + Vitamina D3 (Suplemento Óseo)</option>
+                    <option value="sulfas">🚨 Cotrimoxazol / Sulfamidas (Bactrim) - ¡PROHIBIDO EN LES!</option>
+                    <option value="aines_altos">🚨 Ketorolac / Diclofenac / Ibuprofeno alta dosis (AINEs - Riesgo Renal)</option>
+                    <option value="alopurinol">🚨 Alopurinol (Uricosúrico - Interacción fatal con Azatioprina)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="security-report-box" class="alert-box alert-success security-report-box-target">
+                <strong>✅ COMBINACIÓN COMPATIBLE:</strong><br>
+                Los medicamentos seleccionados son compatibles y seguros para el tratamiento actual.
+              </div>
+            </div>
+          </div>
+
+          <!-- RECOMENDACIONES CLÍNICAS SOBRE FÁRMACOS -->
+          <div class="grid-2">
+            <div class="card">
+              <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--primary-dark);">
+                🛡️ Pautas Fundamentales de Medicación en LES
+              </h4>
+              <ul style="padding-left: 1.25rem; font-size: 0.85rem; color: var(--text-main); display: flex; flex-direction: column; gap: 0.5rem;">
+                <li><strong>No suspender bruscamente la Meprednisona / Prednisona:</strong> Puede generar insuficiencia suprarrenal aguda o un efecto rebote severo del lupus.</li>
+                <li><strong>Horario matutino para corticoides:</strong> Tomar siempre alrededor de las 08:00 hs para imitar el pico fisiológico de cortisol y reducir insomnio.</li>
+                <li><strong>Hidroxicloroquina con alimentos:</strong> Disminuye cualquier molestia gástrica y optimiza la tolerancia.</li>
+                <li><strong>Fondo de ojos anual obligatorio:</strong> Monitoreo de retina indicado para todos los pacientes con antipalúdicos.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--secondary);">
+                📖 ¿Tienes dudas sobre algún fármaco?
+              </h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                Consulta nuestra Guía de Fármacos interactiva para conocer dosis recomendadas, posibles efectos adversos, cuidados en el sol e interacciones.
+              </p>
+              <button class="btn btn-secondary btn-sm" onclick="switchTab('guia')">
+                <span>Ver Guía de Fármacos LupusSync</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             3. TAB: AGENDA DE TURNOS (REUMATOLOGÍA, OFTALMOLOGÍA, LABS)
+             =================================================================== -->
+        <div class="tab-pane" id="pane-turnos">
+          
+          <!-- BANNER DE PRÓXIMO CONTROL PRIORITARIO -->
+          <div class="urgent-appointment-banner" id="urgentAppointmentBanner">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 26px;">🏥</span>
+              <div>
+                <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--primary-violet); letter-spacing: 0.5px;">Control Prioritario • Hospital Posadas</div>
+                <strong style="font-size: 14px; color: #0F172A;" id="urgentTurnoText">Dra. Leila Romina Ferreira (Reumatología)</strong>
+                <div style="font-size: 12px; color: #64748B;" id="urgentTurnoSub">Jueves 05/11 • 14:30 hs • Consultorios Externos Hospital Posadas</div>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="openAddTurnoModal()">+ Agendar Detallado</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--secondary-light); color: var(--secondary);">📅</div>
+                <div>
+                  <h3 class="card-title">Agenda Multidisciplinaria de Turnos y Laboratorios</h3>
+                  <p class="card-subtitle">Controles periódicos en el Hospital Posadas y especialistas de referencia para evitar recaídas.</p>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAddTurnoModal()">
+                <span>+ Agendar Detallado</span>
+              </button>
+            </div>
+
+            <!-- CHIPS DE FILTRO DE TURNOS -->
+            <div class="sub-filter-chips" style="padding: 0 0.5rem; margin-top: 0.5rem; margin-bottom: 0.75rem;">
+              <button type="button" class="sub-chip-btn active" onclick="setTurnoFilter('todos', this)">Todos los turnos</button>
+              <button type="button" class="sub-chip-btn" onclick="setTurnoFilter('proximos', this)">⏳ Próximos</button>
+              <button type="button" class="sub-chip-btn" onclick="setTurnoFilter('posadas', this)">🏥 Hospital Posadas</button>
+              <button type="button" class="sub-chip-btn" onclick="setTurnoFilter('confirmados', this)">✅ Confirmados</button>
+            </div>
+
+            <!-- LISTA DE TURNOS (RENDER DINÁMICO CON ESTILO MED-ROW) -->
+            <div class="turnos-timeline" id="turnosListContainer">
+              <!-- Render dinámico: Dra. Leila Ferreira, Dr. Gastón Silva, Dra. Inés Martínez, etc. -->
+            </div>
+
+            <!-- FORMULARIO RÁPIDO DE AGENDAMIENTO DIRECTO EN PANTALLA -->
+            <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border);">
+              <label class="form-label" style="font-size: 13px; font-weight: 700; margin-bottom: 8px; display: block;">
+                Agendar Nuevo Turno Rápido:
+              </label>
+              <div class="grid-2" style="gap: 10px;">
+                <input type="text" id="quickTurnoDoctor" class="custom-input" placeholder="Ej: Dra. Leila Ferreira (Reumatología)">
+                <input type="datetime-local" id="quickTurnoFecha" class="custom-input">
+              </div>
+              <button class="btn-primary-block" onclick="handleSaveQuickTurno()">
+                <span>📅 Guardar en mi Agenda</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             4. TAB: GUÍA DE FÁRMACOS (VADEMÉCUM ESPECÍFICO DE LUPUS)
+             =================================================================== -->
+        <div class="tab-pane" id="pane-guia">
+          
+          <!-- BANNER DE PROTOCOLO DE URGENCIAS Y FÁRMACOS EN GUARDIA (DEL HTML DE REFERENCIA) -->
+          <div class="urgencia-banner">
+            <div class="urgencia-title">🚨 MODO GUARDIA / PROTOCOLO</div>
+            <div class="urgencia-desc">Exclusivo para médicos de guardia o personal de emergencia si no puedes comunicar tu estado.</div>
+
+            <div style="margin-bottom:12px;">
+              <strong style="font-size:12px; color:#FEF2F2;">ALERTA CLÍNICA:</strong>
+              <div style="font-size:13px; font-weight:700; color:white;">Paciente con Lupus Eritematoso Sistémico (LES) dependiente de corticoides crónicos.</div>
+            </div>
+
+            <div>
+              <strong style="font-size:12px; color:#A7F3D0;">🟢 PERMITIDO / RECOMENDADO:</strong>
+              <div class="badge-clinico-green">
+                • <strong>Hidrocortisona / Metilprednisolona IV:</strong> Dosis de estrés obligatoria ante cirugías o traumatismos graves para prevenir shock suprarrenal.
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <strong style="font-size:12px; color:#FCA5A5;">🔴 CONTRAINDICADO / RIESGO EN GUARDIA:</strong>
+              <div class="badge-clinico-red">
+                • <strong>AINEs Intravenosos Potentes (Ketorolac / Diclofenac):</strong> Riesgo elevado de insuficiencia renal aguda o nefritis lúpica.<br>
+                • <strong>Sulfas (Cotrimoxazol):</strong> Proscritos por provocar brotes graves.
+              </div>
+            </div>
+          </div>
+
+          <!-- VALIDANTE DE COMPATIBILIDAD Y CONSULTOR EMPÁTICO -->
+          <div class="grid-2" style="margin-bottom: 1.5rem;">
+            
+            <!-- CONSULTOR EMPÁTICO LUPUSSYNC -->
+            <div class="card">
+              <div class="card-title-group" style="margin-bottom: 8px;">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">✨</div>
+                <div>
+                  <h3 class="card-title">Consultor Empático LupusSync</h3>
+                  <p class="card-subtitle">Escribe tus sensaciones o dudas del día. Recibirás contención cálida orientada por evidencia médica.</p>
+                </div>
+              </div>
+
+              <textarea id="symptom-input-guia" class="custom-textarea" rows="3" placeholder="¿Cómo te sientes hoy? Escribe aquí con total confianza..."></textarea>
+              <button class="btn-primary-block" onclick="procesarSintomas()">Analizar con Rigor y Calidez</button>
+
+              <div class="alert-box alert-success hidden ia-response-box-target" style="margin-top: 14px; background: #FAF5FF; border-color: #E9D5FF; color: #4C1D95;">
+                <strong style="display:block; margin-bottom:4px; font-size:13px;">💜 Orientación Empática:</strong>
+                <p class="ia-response-text-target"></p>
+              </div>
+            </div>
+
+            <!-- VALIDADOR DE FÁRMACOS Y ESPECIALISTAS -->
+            <div class="card">
+              <div class="card-title-group" style="margin-bottom: 8px;">
+                <div class="card-icon" style="background-color: var(--secondary-light); color: var(--secondary);">🔬</div>
+                <div>
+                  <h3 class="card-title">Validante de Interacciones</h3>
+                  <p class="card-subtitle">Verifica compatibilidad de fármacos indicados por diferentes especialistas.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reuma-med-guia">👨‍⚕️ Recetado por Reumatólogo:</label>
+                <select id="reuma-med-guia" class="custom-select" onchange="analizarCruceEspecialistas(this)">
+                  <option value="hidroxi">Hidroxicloroquina (Plaquinol 200mg - Base Inmunomoduladora)</option>
+                  <option value="corticoide">Meprednisona / Prednisona (Corticosteroide)</option>
+                  <option value="micofenolato">Micofenolato Mofetilo (CellCept - Inmunosupresor renal)</option>
+                  <option value="metotrexato">Metotrexato (MTX Semanal - Inmunosupresor articular)</option>
+                  <option value="azatioprina">Azatioprina (Imuran - Inmunosupresor de mantenimiento)</option>
+                  <option value="belimumab">Belimumab (Benlysta - Terapia Biológica)</option>
+                  <option value="anifrolumab">Anifrolumab (Saphnelo - Terapia Biológica Anti-IFN)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="psy-med-guia">🧠 Recetado por Psiquiatra / Otro:</label>
+                <select id="psy-med-guia" class="custom-select" onchange="analizarCruceEspecialistas(this)">
+                  <option value="ninguno">-- Sin fármaco adicional concomitante --</option>
+                  <option value="escitalopram">Escitalopram / Citalopram (Antidepresivo ISRS)</option>
+                  <option value="sertralina">Sertralina (Antidepresivo ISRS)</option>
+                  <option value="clonazepam">Clonazepam / Lorazepam (Ansiolítico Benzodiacepina)</option>
+                  <option value="fluoxetina">Fluoxetina (Antidepresivo ISRS)</option>
+                  <option value="litio">Carbonato de Litio (Estabilizador del ánimo)</option>
+                  <option value="omeprazol">Omeprazol / Pantoprazol (Protector Gástrico)</option>
+                  <option value="calcio_d">Calcio + Vitamina D3 (Suplemento Óseo)</option>
+                  <option value="sulfas">🚨 Cotrimoxazol / Sulfamidas (Bactrim) - ¡PROHIBIDO EN LES!</option>
+                  <option value="aines_altos">🚨 Ketorolac / Diclofenac / Ibuprofeno alta dosis (AINEs - Riesgo Renal)</option>
+                  <option value="alopurinol">🚨 Alopurinol (Uricosúrico - Interacción fatal con Azatioprina)</option>
+                </select>
+              </div>
+
+              <div class="alert-box alert-success security-report-box-target">
+                <strong>✅ COMBINACIÓN COMPATIBLE:</strong><br>
+                Los medicamentos seleccionados son compatibles y seguros para el tratamiento actual.
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD PRINCIPAL DE VADEMÉCUM -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">📖</div>
+                <div>
+                  <h3 class="card-title">Guía y Vademécum de Fármacos para Lupus</h3>
+                  <p class="card-subtitle">Información rigurosa sobre cómo tomar cada medicamento, efectos adversos y controles necesarios</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- BUSCADOR Y FILTROS -->
+            <div class="guide-search-box">
+              <div class="search-input-wrap">
+                <span class="search-icon-pos">🔍</span>
+                <input type="text" id="guideSearchInput" placeholder="Buscar medicamento por nombre o síntoma..." oninput="filterGuiaFarmacos()">
+              </div>
+              <div class="category-chips" id="categoryChips">
+                <button class="chip-btn active" onclick="setGuiaCategory('todos', this)">Todos</button>
+                <button class="chip-btn" onclick="setGuiaCategory('Inmunomodulador', this)">Inmunomoduladores</button>
+                <button class="chip-btn" onclick="setGuiaCategory('Corticosteroide', this)">Corticoides</button>
+                <button class="chip-btn" onclick="setGuiaCategory('Inmunosupresor', this)">Inmunosupresores</button>
+                <button class="chip-btn" onclick="setGuiaCategory('Terapia Biológica', this)">Biológicos</button>
+                <button class="chip-btn" onclick="setGuiaCategory('Suplemento Osteoprotector', this)">Suplementos</button>
+              </div>
+            </div>
+
+            <!-- GRILLA DE TARJETAS DE FÁRMACOS -->
+            <div class="drugs-grid" id="drugsGridContainer">
+              <!-- Render dinámico -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             5. TAB: HISTORIAL Y REGISTRO DE SÍNTOMAS / BROTES
+             =================================================================== -->
+        <div class="tab-pane" id="pane-historial">
+          
+          <!-- HISTORIAL Y REPORTES CLÍNICOS PARA HOSPITAL POSADAS / TASY (ETAPA 2) -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">📂</div>
+                <div>
+                  <h3 class="card-title">Interoperabilidad Hospitalaria TASY e Historial Clínico</h3>
+                  <p class="card-subtitle">Módulo de exportación compatible con el sistema TASY del Hospital Posadas y consolidación PDF.</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#F8FAFC; padding:16px; border-radius:14px; border:1px solid #E2E8F0; margin-bottom:14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <strong style="font-size:14px; color:var(--primary-violet);">📈 Resumen Clínico del Mes:</strong>
+                <span class="badge badge-emerald">Hospital Posadas • TASY HCE Compatible</span>
+              </div>
+              <span style="font-size:13px; color:var(--text-muted); display: block; margin-top: 6px; line-height: 1.5;">
+                Paciente en remisión clínica sostenida sin alertas de brotes agudos. Adherencia al tratamiento del <strong>95%</strong>. Dosis Meprednisona controlada en <strong>5 mg diarios</strong>. Bloques de texto plano validados para inserción directa en el sistema hospitalario TASY.
+              </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+              <button class="btn btn-primary" onclick="exportarInformeTasy()" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>📄 Exportar Informe TASY / PDF</span>
+              </button>
+              <button class="btn btn-secondary" onclick="copiarTextoTasy()" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>📋 Copiar Texto para TASY</span>
+              </button>
+              <button class="btn btn-secondary" onclick="openTasyViewModal()" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>👁️ Ver Formato Texto Plano</span>
+              </button>
+              <button class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="openOcrScannerModal()">
+                <span>📷 Módulo OCR / Escáner Clínico</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONSULTOR ASISTIDO POR INTELIGENCIA ARTIFICIAL (SOPORTE LUPUS FOG - ETAPA 2) -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">✨</div>
+                <div>
+                  <h3 class="card-title">Consultor Asistido por IA (Soporte Lupus Fog y Guías Clínicas)</h3>
+                  <p class="card-subtitle">Algoritmo adaptativo con filtros de seguridad y antifabulación basados en guías EULAR/ACR.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- SELECTOR DE MODO COGNITIVO LUPUS FOG -->
+            <div class="cognitive-mode-selector">
+              <button type="button" class="cognitive-btn active" id="btnModeFog" onclick="setCognitiveMode('fog')">
+                <span>🧠 Modo Lupus Fog (Compromiso Cognitivo / Lenguaje Claro)</span>
+              </button>
+              <button type="button" class="cognitive-btn" id="btnModeDetailed" onclick="setCognitiveMode('detailed')">
+                <span>🔬 Modo Clínico Detallado (Guías EULAR/ACR y Hospital Posadas)</span>
+              </button>
+            </div>
+
+            <!-- CHIPS DE CONSULTAS FRECUENTES -->
+            <div class="prompt-chips-wrap">
+              <button type="button" class="prompt-chip" onclick="setQuickPrompt('Siento lentitud mental y confusión (Lupus Fog hoy)')">
+                🧠 Niebla mental / Lupus Fog
+              </button>
+              <button type="button" class="prompt-chip" onclick="setQuickPrompt('Tengo eritema malar en la cara y ardor')">
+                🦋 Eritema malar en mariposa
+              </button>
+              <button type="button" class="prompt-chip" onclick="setQuickPrompt('¿Puedo tomar Ibuprofeno o Ketorolac si me duelen las manos?')">
+                💊 ¿Puedo tomar Ibuprofeno?
+              </button>
+              <button type="button" class="prompt-chip" onclick="setQuickPrompt('Tengo febrícula de 37.6 °C hoy')">
+                🌡️ Febrícula de 37.6 °C
+              </button>
+              <button type="button" class="prompt-chip" onclick="setQuickPrompt('Olvidé tomar la medicación de la mañana')">
+                ⏰ Olvido de dosis
+              </button>
+              <button type="button" class="prompt-chip" onclick="setQuickPrompt('¿Puedo salir al sol con protector FPS 50+?')">
+                ☀️ Salir al sol con protector
+              </button>
+            </div>
+
+            <textarea id="symptom-input" class="custom-textarea" rows="3" placeholder="¿Cómo te sientes hoy? Escribe tus dudas sobre síntomas, medicación o sensaciones..."></textarea>
+            
+            <button class="btn-primary-block" onclick="procesarSintomas()">
+              <span>Analizar con Rigor y Calidez Empática</span>
+            </button>
+
+            <div id="ia-response-box" class="alert-box alert-success hidden ia-response-box-target" style="margin-top: 14px; background: #FAF5FF; border-color: #E9D5FF; color: #4C1D95;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <strong style="font-size: 13.5px;">💜 Orientación Asistida por IA (Supervisión Médica Dra. Leila Ferreira):</strong>
+                <span id="iaModeBadge" class="badge badge-purple" style="font-size: 10px;">Modo Lupus Fog Activo</span>
+              </div>
+              <div id="ia-response-text" class="ia-response-text-target" style="font-size: 13px; line-height: 1.6;"></div>
+            </div>
+          </div>
+
+          <!-- FORMULARIO DE REGISTRO DIARIO DE SÍNTOMAS / BROTES -->
+          <div class="flare-tracker-form">
+            <div class="card-header" style="border-bottom: none; margin-bottom: 0.5rem; padding-bottom: 0;">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">📝</div>
+                <div>
+                  <h3 class="card-title">Registrar Estado de Hoy / Síntomas</h3>
+                  <p class="card-subtitle">Lleva este diario para mostrar a tu reumatólogo/a en la próxima consulta</p>
+                </div>
+              </div>
+            </div>
+
+            <form id="symptomLogForm" onsubmit="handleSaveSymptomEntry(event)">
+              <div class="grid-3" style="margin-top: 1.25rem;">
+                <!-- SLIDER DE DOLOR -->
+                <div class="form-group slider-container">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label class="form-label" style="margin: 0;">Nivel de Dolor Articular (0 a 10)</label>
+                    <span class="slider-val-display" id="painValDisplay">3</span>
+                  </div>
+                  <input type="range" id="painSlider" min="0" max="10" value="3" class="pain-slider" oninput="updatePainDisplay(this.value)">
+                  <div class="slider-labels">
+                    <span>0: Sin dolor</span>
+                    <span>5: Moderado</span>
+                    <span>10: Incapacitante</span>
+                  </div>
+                </div>
+
+                <!-- FATIGA -->
+                <div class="form-group">
+                  <label class="form-label" for="fatigaSelect">Nivel de Fatiga / Cansancio</label>
+                  <select id="fatigaSelect" class="form-control">
+                    <option value="Ninguna">Ninguna (Buena energía)</option>
+                    <option value="Leve" selected>Leve (Realizo actividades sin problema)</option>
+                    <option value="Moderada">Moderada (Necesito descansos)</option>
+                    <option value="Severa">Severa (Dificultad para tareas básicas)</option>
+                    <option value="Extrema">Extrema (En cama la mayor parte del día)</option>
+                  </select>
+                </div>
+
+                <!-- TEMPERATURA -->
+                <div class="form-group">
+                  <label class="form-label" for="tempInput">Temperatura Corporal (°C)</label>
+                  <input type="number" id="tempInput" step="0.1" min="35" max="42" value="36.5" class="form-control">
+                </div>
+              </div>
+
+              <!-- CHECKBOXES DE SÍNTOMAS ESPECÍFICOS DE LUPUS -->
+              <div style="margin-top: 0.5rem;">
+                <label class="form-label">Síntomas presentes hoy:</label>
+                <div class="symptoms-checkbox-grid">
+                  <label class="symptom-check-label">
+                    <input type="checkbox" id="chkEritema">
+                    <span>🦋 Eritema Malar (Rash mariposa)</span>
+                  </label>
+                  <label class="symptom-check-label">
+                    <input type="checkbox" id="chkFotosensibilidad">
+                    <span>☀️ Fotosensibilidad / Ardor solar</span>
+                  </label>
+                  <label class="symptom-check-label">
+                    <input type="checkbox" id="chkArtritis">
+                    <span>🤲 Rigidez matutina / Inflamación</span>
+                  </label>
+                  <label class="symptom-check-label">
+                    <input type="checkbox" id="chkUlceras">
+                    <span>👄 Llagas o aftas bucales</span>
+                  </label>
+                  <label class="symptom-check-label">
+                    <input type="checkbox" id="chkAlopecia">
+                    <span>💇‍♀️ Caída inusual de cabello</span>
+                  </label>
+                  <label class="symptom-check-label">
+                    <input type="checkbox" id="chkDolorPecho">
+                    <span>🫁 Dolor en pecho al respirar (Pleurítico)</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid-2" style="margin-top: 0.5rem;">
+                <div class="form-group">
+                  <label class="form-label" for="txtArticulaciones">Articulaciones con mayor dolor:</label>
+                  <input type="text" id="txtArticulaciones" class="form-control" placeholder="Ej: Muñeca derecha y nudillos">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="txtExposicionSolar">Exposición solar aproximada (minutos):</label>
+                  <input type="number" id="txtExposicionSolar" class="form-control" value="15" min="0">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="txtNotasSintomas">Notas u observaciones del día:</label>
+                <textarea id="txtNotasSintomas" class="form-control" placeholder="Describe cómo te sentiste, actividades realizadas o cambios en la rutina..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <span>💾 Guardar Registro de Síntomas</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- HISTORIAL CRONOLÓGICO -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--secondary-light); color: var(--secondary);">📜</div>
+                <div>
+                  <h3 class="card-title">Línea de Tiempo de Síntomas Registrados</h3>
+                  <p class="card-subtitle">Evolución histórica para control del reumatólogo</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-entries" id="symptomsTimelineContainer">
+              <!-- Render dinámico -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             6. TAB: GUARDIA DE EMERGENCIAS (SOS, BANDERAS ROJAS Y CENTROS)
+             =================================================================== -->
+        <div class="tab-pane" id="pane-emergencias">
+          <!-- HERO SOS -->
+          <div class="emergency-hero-banner">
+            <div>
+              <div style="text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; font-weight: 800; opacity: 0.9;">
+                Atención Médica Urgente
+              </div>
+              <h2 style="font-size: 1.85rem; font-weight: 800; margin: 0.35rem 0;">
+                Guardia de Emergencias LupusSync
+              </h2>
+              <p style="font-size: 0.95rem; opacity: 0.9; max-width: 580px;">
+                Si presentas signos de alarma, comunícate de inmediato con el servicio de emergencias médicas o dirígete a la guardia más cercana.
+              </p>
+            </div>
+            <a href="tel:107" class="sos-pulse-button" title="Llamar al Sistema de Emergencias Médicas">
+              107
+              <span>LLAMAR SOS</span>
+            </a>
+          </div>
+
+          <!-- BOTONES DE CONTACTO RÁPIDO / URGENCIAS -->
+          <div class="emergency-quick-grid">
+            <a href="tel:107" class="btn-emergency-action btn-emergency-same">
+              <span style="font-size: 1.5rem;">🚑</span>
+              <div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.9;">SAME Urgencias</div>
+                <div style="font-size: 1.1rem; font-weight: 800;">Llamar 107</div>
+              </div>
+            </a>
+
+            <a href="tel:911" class="btn-emergency-action" style="background: linear-gradient(135deg, #1E293B, #0F172A); color: #fff;">
+              <span style="font-size: 1.5rem;">🚓</span>
+              <div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.9;">Central de Urgencias</div>
+                <div style="font-size: 1.1rem; font-weight: 800;">Llamar 911</div>
+              </div>
+            </a>
+
+            <a href="tel:+541144699300" class="btn-emergency-action btn-emergency-posadas">
+              <span style="font-size: 1.5rem;">🏥</span>
+              <div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.9;">Hosp. Posadas (Guardia)</div>
+                <div style="font-size: 0.95rem; font-weight: 800;">(011) 4469-9300</div>
+              </div>
+            </a>
+
+            <a href="tel:+541155913342" id="quickCallFamiliarBtn" class="btn-emergency-action btn-emergency-familiar">
+              <span style="font-size: 1.5rem;">👨‍👩‍👧</span>
+              <div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.9;">Contacto Familiar</div>
+                <div style="font-size: 0.95rem; font-weight: 800;" id="quickCallFamiliarName">Carlos Fernández</div>
+              </div>
+            </a>
+
+            <button type="button" class="btn-emergency-action btn-emergency-whatsapp" onclick="handleSendWhatsAppAlert()">
+              <span style="font-size: 1.5rem;">📲</span>
+              <div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.9;">Alerta Rápida</div>
+                <div style="font-size: 0.95rem; font-weight: 800;">Enviar SOS WhatsApp</div>
+              </div>
+            </button>
+          </div>
+
+          <!-- PROTOCOLO RÁPIDO ANTE BROTE GRAVE DE LUPUS -->
+          <div class="protocol-acute-card">
+            <div class="protocol-header">
+              <span style="font-size: 1.75rem;">🚨</span>
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: #991B1B; margin: 0;">
+                  Protocolo Rápido de Emergencia ante Brote Grave
+                </h3>
+                <p style="font-size: 0.825rem; color: #7F1D1D; margin: 2px 0 0 0;">
+                  Pasos estandarizados de soporte clínico inmediato supervisados por Reumatología (Hospital Posadas)
+                </p>
+              </div>
+            </div>
+
+            <div class="protocol-steps-grid">
+              <div class="protocol-step-box">
+                <div class="protocol-step-number">Paso 1: Identificación</div>
+                <div class="protocol-step-title">Reconocer Banderas Rojas</div>
+                <div class="protocol-step-desc">
+                  Verifica fiebre mayor a 38 °C persistente, dolor punzante en el pecho al respirar, hinchazón súbita de piernas/párpados u orina con espuma/oscura.
+                </div>
+              </div>
+
+              <div class="protocol-step-box">
+                <div class="protocol-step-number">Paso 2: Conducta Farmacológica</div>
+                <div class="protocol-step-title">Precaución Estricta con Fármacos</div>
+                <div class="protocol-step-desc">
+                  <strong>PROHIBIDO tomar AINEs (Ibuprofeno, Ketorolac, Diclofenac)</strong> por daño renal agudo. <strong>NO suspender</strong> la dosis habitual de Prednisona.
+                </div>
+              </div>
+
+              <div class="protocol-step-box">
+                <div class="protocol-step-number">Paso 3: Contacto Inmediato</div>
+                <div class="protocol-step-title">Activar Asistencia Médica</div>
+                <div class="protocol-step-desc">
+                  Comunícate al <strong>107 (SAME)</strong> o acude a la guardia del <strong>Hospital Posadas</strong> o centro con reumatólogo de guardia las 24 horas.
+                </div>
+              </div>
+
+              <div class="protocol-step-box">
+                <div class="protocol-step-number">Paso 4: Documentación</div>
+                <div class="protocol-step-title">Presentar Ficha Médica</div>
+                <div class="protocol-step-desc">
+                  Muestra la <em>Ficha para Médicos de Guardia</em> de abajo. Alerta sobre el uso crónico de corticoides para indicar dosis de estrés si es requerida.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FICHA DE EMERGENCIA MÉDICA PARA MÉDICOS DE GUARDIA -->
+          <div class="card" style="border: 2px solid var(--primary); background: #faf5ff;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary); color: #fff;">🆔</div>
+                <div>
+                  <h3 class="card-title" style="color: var(--primary-dark);">Ficha Rápida para Médicos de Guardia</h3>
+                  <p class="card-subtitle">Muestra esta pantalla al personal médico al ingresar a la guardia</p>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-primary" onclick="window.print()">🖨️ Imprimir Ficha</button>
+            </div>
+
+            <div class="grid-3" style="gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: #fff; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Paciente</div>
+                <div style="font-size: 1.1rem; font-weight: 800;" id="sosPatientName">Lucía Belén Fernández</div>
+                <div style="font-size: 0.825rem; color: var(--text-muted);" id="sosPatientDni">DNI: 38.452.120</div>
+              </div>
+
+              <div style="background: #fff; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Diagnóstico y Grupo Sanguíneo</div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: var(--primary);" id="sosPatientDiag">LES (Lupus Eritematoso Sistémico)</div>
+                <div style="font-size: 0.825rem; font-weight: 700; color: var(--danger);" id="sosPatientBlood">Grupo: A+</div>
+              </div>
+
+              <div style="background: #fff; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Contacto Urgente</div>
+                <div style="font-size: 1.05rem; font-weight: 800;" id="sosContactName">Carlos Fernández (Padre)</div>
+                <a href="tel:+541155913342" id="sosContactTel" style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); text-decoration: none;">
+                  📞 +54 11 5591-3342
+                </a>
+              </div>
+            </div>
+
+            <!-- ALERTA CLÍNICA DE CORTICOIDES -->
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 1rem; font-size: 0.85rem; color: #991b1b; display: flex; align-items: center; gap: 0.85rem;">
+              <span style="font-size: 1.5rem;">⚠️</span>
+              <div>
+                <strong>ATENCIÓN MÉDICO DE GUARDIA:</strong> Paciente bajo tratamiento inmunosupresor y corticoide crónico (Prednisona). En caso de infección severa o cirugía de urgencia, considerar soporte hidroelectrolítico y dosis de estrés de corticoides para prevenir crisis suprarrenal aguda.
+              </div>
+            </div>
+          </div>
+
+          <!-- BANDERAS ROJAS / PAUTAS DE ALARMA -->
+          <div class="red-flags-card" style="margin-bottom: 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span style="font-size: 1.4rem;">🚩</span>
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--danger);">
+                  Pautas de Alarma: ¿Cuándo acudir inmediatamente a la Guardia?
+                </h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">
+                  Síntomas que no deben esperar al turno programado y requieren evaluación urgente
+                </p>
+              </div>
+            </div>
+
+            <ul class="red-flags-list">
+              <li class="red-flag-item">
+                <span class="red-flag-icon">🔥</span>
+                <div>
+                  <strong>Fiebre mayor a 38 °C persistente:</strong> En pacientes con inmunosupresores (Prednisona, Micofenolato), cualquier fiebre debe descartar infección bacteriana urgente antes de atribuirla a un brote de lupus.
+                </div>
+              </li>
+              <li class="red-flag-item">
+                <span class="red-flag-icon">🫀</span>
+                <div>
+                  <strong>Dolor torácico punzante al respirar o falta de aire súbita:</strong> Posible pleuritis, pericarditis lúpica o tromboembolismo pulmonar.
+                </div>
+              </li>
+              <li class="red-flag-item">
+                <span class="red-flag-icon">💧</span>
+                <div>
+                  <strong>Hinchazón repentina de piernas o párpados, u orina espumosa/oscura:</strong> Indica reactivación renal aguda (Nefritis lúpica en actividad) que exige proteinuria urgente y ajuste de medicación.
+                </div>
+              </li>
+              <li class="red-flag-item">
+                <span class="red-flag-icon">🧠</span>
+                <div>
+                  <strong>Dolor de cabeza intenso e inusual, convulsiones o visión borrosa:</strong> Signo de alarma neurológico o crisis hipertensiva.
+                </div>
+              </li>
+              <li class="red-flag-item">
+                <span class="red-flag-icon">🩸</span>
+                <div>
+                  <strong>Sangrado espontáneo de encías o hematomas extensos sin golpe:</strong> Posible caída severa de plaquetas (trombocitopenia autoinmune).
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- HOSPITALES Y CENTROS DE GUARDIA -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--secondary-light); color: var(--secondary);">🏥</div>
+                <div>
+                  <h3 class="card-title">Centros de Guardia con Servicio de Reumatología</h3>
+                  <p class="card-subtitle">Hospitales de referencia con guardia activa las 24 horas</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-3" style="gap: 1.25rem;">
+              <!-- HOSPITAL POSADAS (CENTRO DE REFERENCIA DE LA ETAPA 2) -->
+              <div class="hospital-card" style="border: 2px solid var(--primary-violet); background: #FAF5FF;">
+                <div>
+                  <div class="badge badge-purple" style="margin-bottom: 0.5rem;">Centro de Referencia • Sistema TASY</div>
+                  <h4 style="font-size: 1rem; font-weight: 800; color: var(--primary-dark);">Hospital Nacional Prof. Alejandro Posadas</h4>
+                  <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 0.35rem;">
+                    📍 Av. Presidente Illia y Marconi, El Palomar, Morón<br>
+                    📞 Guardia General 24hs: +54 11 4469-9300<br>
+                    📞 Servicio de Reumatología: +54 11 4469-9200
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+                  <a href="tel:+541144699300" class="btn btn-sm btn-secondary" style="flex:1;">Llamar</a>
+                  <a href="https://maps.google.com/?q=Hospital+Nacional+Alejandro+Posadas" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Mapa</a>
+                </div>
+              </div>
+
+              <div class="hospital-card">
+                <div>
+                  <div class="badge badge-purple" style="margin-bottom: 0.5rem;">Hospital Universitario</div>
+                  <h4 style="font-size: 1rem; font-weight: 800;">Hospital de Clínicas José de San Martín</h4>
+                  <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 0.35rem;">
+                    📍 Av. Córdoba 2351, CABA<br>
+                    📞 Guardia: +54 11 5950-8000
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <a href="tel:+541159508000" class="btn btn-sm btn-secondary" style="flex:1;">Llamar</a>
+                  <a href="https://maps.google.com/?q=Hospital+de+Clinicas+Buenos+Aires" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Mapa</a>
+                </div>
+              </div>
+
+              <div class="hospital-card">
+                <div>
+                  <div class="badge badge-blue" style="margin-bottom: 0.5rem;">Hospital General</div>
+                  <h4 style="font-size: 1rem; font-weight: 800;">Hospital General de Agudos J. M. Ramos Mejía</h4>
+                  <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 0.35rem;">
+                    📍 Gral. Urquiza 609, CABA<br>
+                    📞 Guardia: +54 11 4127-0200
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <a href="tel:+541141270200" class="btn btn-sm btn-secondary" style="flex:1;">Llamar</a>
+                  <a href="https://maps.google.com/?q=Hospital+Ramos+Mejia+Buenos+Aires" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Mapa</a>
+                </div>
+              </div>
+
+              <div class="hospital-card">
+                <div>
+                  <div class="badge badge-emerald" style="margin-bottom: 0.5rem;">Centro de Alta Complejidad</div>
+                  <h4 style="font-size: 1rem; font-weight: 800;">Hospital Italiano de Buenos Aires</h4>
+                  <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 0.35rem;">
+                    📍 Tte. Gral. Juan D. Perón 4190, CABA<br>
+                    📞 Guardia Central: +54 11 4959-0200
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <a href="tel:+541149590200" class="btn btn-sm btn-secondary" style="flex:1;">Llamar</a>
+                  <a href="https://maps.google.com/?q=Hospital+Italiano+Buenos+Aires" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Mapa</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             7. TAB: BASE DE DATOS EN ARCHIVOS JSON (SIN COSTO)
+             =================================================================== -->
+        <div class="tab-pane" id="pane-config">
+          
+          <!-- BANNER HERO DE BASE DE DATOS JSON -->
+          <div class="config-hero-card">
+            <div>
+              <div style="text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; font-weight: 800; color: #38BDF8; margin-bottom: 4px;">
+                Persistencia Local en Disco • 100% Gratuito
+              </div>
+              <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0 0 6px 0;">
+                📁 Base de Datos en Archivos JSON
+              </h2>
+              <p style="font-size: 0.9rem; opacity: 0.9; max-width: 620px; line-height: 1.5; margin: 0;">
+                LupusSync gestiona toda la información médica en archivos <code>.json</code> locales dentro de la carpeta <code>data/</code>. Sin costos de Google Firebase, sin tarjetas y sin depender de servicios pagos en la nube.
+              </p>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+              <div class="config-status-chip local" id="dbConfigStatusChip">
+                <span class="status-dot pulse" id="dbConfigStatusDot"></span>
+                <span id="dbConfigStatusText">Archivos JSON Locales Activos</span>
+              </div>
+              <span style="font-size: 0.75rem; opacity: 0.75;">Directorio: <code>data/*.json</code></span>
+            </div>
+          </div>
+
+          <!-- RESUMEN DE REGISTROS ALMACENADOS EN ARCHIVOS JSON -->
+          <div class="card" style="margin-bottom: 1.25rem;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">📊</div>
+                <div>
+                  <h3 class="card-title">Resumen de Datos Clínicos Almacenados</h3>
+                  <p class="card-subtitle">Volumen de registros almacenados en los archivos .json locales de LupusSync</p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn btn-sm btn-primary" onclick="handleForceSaveJsonDisk()">💾 Guardar en Disco</button>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="renderJsonDatabaseView()">🔄 Actualizar Métricas</button>
+              </div>
+            </div>
+
+            <div class="config-summary-badge-grid">
+              <div class="config-summary-pill">
+                <div class="val" id="cntUser">1</div>
+                <div class="lbl">Perfil Paciente (paciente.json)</div>
+              </div>
+              <div class="config-summary-pill">
+                <div class="val" id="cntMeds">5</div>
+                <div class="lbl">Fármacos (medicamentos.json)</div>
+              </div>
+              <div class="config-summary-pill">
+                <div class="val" id="cntTurnos">6</div>
+                <div class="lbl">Citas (turnos.json)</div>
+              </div>
+              <div class="config-summary-pill">
+                <div class="val" id="cntSintomas">4</div>
+                <div class="lbl">Brotes (sintomas.json)</div>
+              </div>
+              <div class="config-summary-pill">
+                <div class="val" id="cntGuia">8</div>
+                <div class="lbl">Vademécum LES</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GRID DE ARCHIVOS JSON Y ACCIONES DE PERSISTENCIA -->
+          <div class="grid-2" style="margin-bottom: 1.5rem;">
+            
+            <!-- TARJETA: ESTRUCTURA DE ARCHIVOS JSON -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <div class="card-icon" style="background-color: var(--secondary-light); color: var(--secondary);">📂</div>
+                  <div>
+                    <h3 class="card-title">Archivos de Base de Datos en Disco</h3>
+                    <p class="card-subtitle">Colecciones almacenadas localmente en formato JSON legible</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+                <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-main); display: block;">👤 data/paciente.json</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Ficha médica, DNI, diagnóstico y contacto de urgencia</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="handleSelectJsonFile('paciente.json')" style="padding: 4px 10px; font-size: 0.75rem;">👁️ Ver</button>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-main); display: block;">📋 data/historia_clinica.json</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Criterios EULAR/ACR 2019, laboratorios C3/C4 y evolución</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="handleSelectJsonFile('historia_clinica.json')" style="padding: 4px 10px; font-size: 0.75rem;">👁️ Ver</button>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-main); display: block;">💊 data/medicamentos.json</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Fármacos prescritos, dosis, horarios y checklist de tomas</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="handleSelectJsonFile('medicamentos.json')" style="padding: 4px 10px; font-size: 0.75rem;">👁️ Ver</button>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-main); display: block;">📅 data/turnos.json</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Agenda de consultas con Reumatología, Oftalmología, Nefrología</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="handleSelectJsonFile('turnos.json')" style="padding: 4px 10px; font-size: 0.75rem;">👁️ Ver</button>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-main); display: block;">📈 data/sintomas.json</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Historial diario de brotes, escala de dolor articular y fatiga</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="handleSelectJsonFile('sintomas.json')" style="padding: 4px 10px; font-size: 0.75rem;">👁️ Ver</button>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-main); display: block;">👥 data/usuarios.json</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Credenciales de inicio de sesión sin Firebase Auth</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="handleSelectJsonFile('usuarios.json')" style="padding: 4px 10px; font-size: 0.75rem;">👁️ Ver</button>
+                </div>
+
+                <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <strong style="font-size: 0.85rem; color: #166534; display: block;">📦 data/lupussync_master.json</strong>
+                    <span style="font-size: 0.75rem; color: #15803D;">Copia consolidada de todas las colecciones</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-primary" onclick="handleSelectJsonFile('lupussync_master.json')" style="padding: 4px 10px; font-size: 0.75rem;">👁️ Ver Master</button>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" onclick="handleForceSaveJsonDisk()" style="flex: 1;">
+                  <span>💾 Guardar Cambios a Disco</span>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="handleTestDatabaseConnection()">
+                  <span>🧪 Probar Conexión de Archivos JSON</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- TARJETA: INTEGRACIÓN, RESPALDOS & EXPORTACIÓN -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <div class="card-icon" style="background-color: var(--primary-light); color: var(--primary);">💾</div>
+                  <div>
+                    <h3 class="card-title">Copias de Seguridad y Exportación</h3>
+                    <p class="card-subtitle">Descarga o restaura tu base de datos completa en archivos .json</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COPIA DE SEGURIDAD MAESTRA -->
+              <div style="background: #FAF5FF; border: 1px solid #E9D5FF; border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+                <strong style="font-size: 0.9rem; color: #6B21A8; display: block; margin-bottom: 6px;">
+                  📦 Descarga Completa de la Base de Datos
+                </strong>
+                <p style="font-size: 0.8rem; color: #4C1D95; margin-bottom: 10px; line-height: 1.45;">
+                  Descarga un archivo <code>.json</code> único con toda la información de Lucía Fernández (perfil, medicamentos, citas, historia clínica y síntomas).
+                </p>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-sm btn-primary" onclick="handleExportBackupJSON()" style="flex: 1;">
+                    <span>📥 Descargar lupussync_master.json</span>
+                  </button>
+                  <label class="btn btn-sm btn-secondary" style="flex: 1; cursor: pointer; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center;">
+                    <span>📤 Restaurar desde .json</span>
+                    <input type="file" id="backupFileInput" accept=".json" style="display: none;" onchange="handleImportBackupJSON(event)">
+                  </label>
+                </div>
+              </div>
+
+              <!-- DESCARGA INDIVIDUAL -->
+              <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+                <strong style="font-size: 0.9rem; color: var(--text-main); display: block; margin-bottom: 6px;">
+                  📄 Descargar Archivo Específico
+                </strong>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.45;">
+                  Selecciona una colección clínica en particular para descargarla como archivo independiente:
+                </p>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <select id="selectJsonFileView" class="custom-input" style="flex: 1; min-width: 170px;" onchange="handleSelectJsonFile(this.value)">
+                    <option value="lupussync_master.json">📦 lupussync_master.json (Todo)</option>
+                    <option value="paciente.json">👤 paciente.json (Ficha)</option>
+                    <option value="medicamentos.json">💊 medicamentos.json (Fármacos)</option>
+                    <option value="turnos.json">📅 turnos.json (Citas)</option>
+                    <option value="sintomas.json">📈 sintomas.json (Brotes)</option>
+                    <option value="historia_clinica.json">📋 historia_clinica.json (Laboratorios)</option>
+                    <option value="usuarios.json">👥 usuarios.json (Cuentas)</option>
+                  </select>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="handleExportSelectedJson()">
+                    <span>📥 Descargar</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- VENTAJAS DEL ALMACENAMIENTO JSON -->
+              <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; font-size: 0.8rem; color: #1E40AF; line-height: 1.45;">
+                <strong>💡 ¿Por qué archivos .json en lugar de Firebase?</strong>
+                <ul style="margin: 6px 0 0 16px; padding: 0;">
+                  <li><strong>Sin Costos:</strong> No requiere suscripción ni tarjeta de crédito de Google Cloud.</li>
+                  <li><strong>Portabilidad Total:</strong> Los archivos .json se pueden abrir y editar en cualquier editor de texto.</li>
+                  <li><strong>Interoperabilidad TASY:</strong> Facilita la exportación directa de informes clínicos.</li>
+                </ul>
+              </div>
+
+              <!-- RESTABLECER MODO DEMO -->
+              <div style="border-top: 1px solid var(--border); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                  ¿Necesitas restaurar los datos iniciales?
+                </span>
+                <button type="button" class="btn btn-sm btn-secondary" style="color: var(--danger); border-color: var(--danger-border);" onclick="handleResetLocalDemoData()">
+                  <span>🔄 Restablecer Demo Hospital Posadas</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TARJETA: VISOR EN TIEMPO REAL Y CONSOLA DE DIAGNÓSTICO -->
+          <div class="grid-2">
+            
+            <!-- VISOR / EDITOR DE ARCHIVOS JSON -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <div class="card-icon" style="background-color: #0F172A; color: #38BDF8;">👁️</div>
+                  <div>
+                    <h3 class="card-title">Visor de Archivos JSON en Tiempo Real</h3>
+                    <p class="card-subtitle">Inspecciona y edita el contenido directo de los archivos de datos</p>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="updateJsonViewerText()">🔄 Recargar</button>
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label class="form-label" for="cfgJsonTextarea">Contenido del archivo seleccionado:</label>
+                <textarea id="cfgJsonTextarea" class="config-code-area" rows="12" placeholder="{ ... }"></textarea>
+              </div>
+
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" onclick="handleSaveJsonDirectFromViewer()" style="flex: 1;">
+                  <span>💾 Guardar Cambios en este Archivo</span>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="handleExportSelectedJson()">
+                  <span>📥 Descargar Archivo</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- TERMINAL DE EVENTOS Y DIAGNÓSTICO EN VIVO -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <div class="card-icon" style="background-color: #0F172A; color: #22C55E;">💻</div>
+                  <div>
+                    <h3 class="card-title">Consola de Operaciones de Base de Datos</h3>
+                    <p class="card-subtitle">Registro en tiempo real de lectura y escritura en archivos JSON</p>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="clearJsonDbLog()">Limpiar</button>
+              </div>
+
+              <div class="config-log-window" id="dbLogOutput">
+[19:30:00] Motor de Base de Datos JSON LupusSync inicializado.
+[19:30:01] Carpeta de almacenamiento: e:\lupusSync\data\
+[19:30:01] 7 colecciones activas: paciente, historia, medicamentos, turnos, sintomas, usuarios, master.
+[19:30:02] Sistema 100% autónomo y gratuito (Sin costos ni dependencias de Firebase).
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ===================================================================
+             8. TAB: ZONAS ESPECIALES A CUIDAR (PROTOCOLOS POR ÓRGANO)
+             =================================================================== -->
+        <div class="tab-pane" id="pane-zonas">
+
+          <!-- BANNER HERO: ZONA PRIORITARIA DEL PACIENTE -->
+          <div class="zona-priority-banner">
+            <div class="zona-priority-info">
+              <div class="zona-priority-icon">🛡️</div>
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-dark); margin: 0;">
+                  Zonas Especiales a Cuidar en Lupus
+                </h3>
+                <p style="font-size: 0.825rem; color: var(--text-muted); margin: 2px 0 0 0;">
+                  Guía personalizada de protección de órganos diana, prevención de brotes y señales de alarma clínica.
+                </p>
+                <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span style="font-size: 0.775rem; font-weight: 700; color: #475569;">Tu zona prioritaria actual:</span>
+                  <span class="badge badge-purple" id="badgeZonaPrioritariaActiva" style="font-size: 11px;">Riñones (Nefritis Lúpica)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SELECTOR RÁPIDO DE ZONA PRIORITARIA -->
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <select id="selectZonaPrioritaria" class="custom-select" style="max-width: 250px; font-size: 12.5px; padding: 8px 12px;" onchange="cambiarZonaPrioritaria(this.value)">
+                <option value="Riñones (Nefritis Lúpica)">Riñones (Nefritis Lúpica)</option>
+                <option value="Piel y Rostro (Fotosensibilidad y Eritema Malar)">Piel y Rostro (Fotosensibilidad)</option>
+                <option value="Articulaciones (Poliartritis y Manos)">Articulaciones (Manos y Rodillas)</option>
+                <option value="Ojos y Retina (Vigilancia Antipalúdica)">Ojos y Retina (Fondo de Ojo)</option>
+                <option value="Corazón y Sistema Cardiovascular">Corazón y Vasos Sanguíneos</option>
+                <option value="Boca, Mucosas y Cuero Cabelludo">Boca, Mucosas y Cabello (Alopecia)</option>
+                <option value="Sistema Nervioso y Salud Cognitiva">Salud Cognitiva (Lupus Fog)</option>
+                <option value="Cuidado Integral General">Cuidado Integral General</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="guardarZonaPrioritariaEnPerfil()" style="font-size: 12px; padding: 8px 12px;">
+                <span>💾 Guardar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- FILTROS POR CATEGORÍA DE ZONA -->
+          <div class="category-chips" style="margin-bottom: 1.25rem;">
+            <button class="chip-btn active" onclick="filtrarTarjetasZonas('todas', this)">Todas las Zonas</button>
+            <button class="chip-btn" onclick="filtrarTarjetasZonas('rinon', this)">🫘 Riñones</button>
+            <button class="chip-btn" onclick="filtrarTarjetasZonas('piel', this)">🦋 Piel y Rostro</button>
+            <button class="chip-btn" onclick="filtrarTarjetasZonas('articulaciones', this)">🦴 Articulaciones</button>
+            <button class="chip-btn" onclick="filtrarTarjetasZonas('ojos', this)">👁️ Ojos y Retina</button>
+            <button class="chip-btn" onclick="filtrarTarjetasZonas('corazon', this)">🫀 Corazón</button>
+            <button class="chip-btn" onclick="filtrarTarjetasZonas('mucosas', this)">👄 Boca y Cabello</button>
+            <button class="chip-btn" onclick="filtrarTarjetasZonas('cognitivo', this)">🧠 Lupus Fog</button>
+          </div>
+
+          <!-- GRILLA DE ZONAS ESPECIALES -->
+          <div class="zona-grid" id="contenedorZonasGrid">
+
+            <!-- 1. RIÑONES -->
+            <div class="zona-card" data-zona="rinon" id="zona-card-rinon">
+              <div class="zona-card-header">
+                <div class="zona-card-icon" style="background: #FEE2E2; color: #DC2626;">🫘</div>
+                <div>
+                  <div class="zona-card-title">Riñones (Nefritis Lúpica)</div>
+                  <span class="zona-card-badge" style="background: #FEF2F2; color: #991B1B;">Órgano Crítico • Hospital Posadas</span>
+                </div>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🔬 ¿Por qué requiere cuidado especial?</div>
+                <p style="font-size: 0.825rem; color: #475569; line-height: 1.45;">
+                  El depósito de inmunocomplejos en los glomérulos renales produce inflamación silente (glomerulonefritis lúpica). No produce dolor lumbar en fases iniciales, por lo que su vigilancia analítica es vital para evitar fibrosis o insuficiencia renal.
+                </p>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🛡️ Cuidados diarios esenciales:</div>
+                <ul class="zona-care-list">
+                  <li><strong>Monitoreo de presión arterial:</strong> Medir semanalmente; mantener siempre por debajo de 125/80 mmHg.</li>
+                  <li><strong>Dieta hiposódica estricta:</strong> Reducir sal y alimentos ultraprocesados para proteger la barrera glomerular.</li>
+                  <li><strong>Hidratación balanceada:</strong> Consumir entre 1.5 y 2 litros de agua por día salvo restricción médica.</li>
+                  <li><strong>Cero automedicación con AINEs:</strong> PROHIBIDO Ketorolac, Ibuprofeno alto o Diclofenac por vasoconstricción renal severa.</li>
+                </ul>
+              </div>
+
+              <div class="zona-alert-box">
+                <strong>🚨 Pauta de Alarma (Guardia Inmediata):</strong><br>
+                Orina con espuma abundante persistente (proteinuria), color amarronado o té oscuro, hinchazón matutina de párpados (edema periorbitario) o de tobillos, y aumento repentino de más de 2 kg en pocos días.
+              </div>
+
+              <div class="zona-card-footer">
+                <span style="font-size: 0.775rem; color: var(--text-muted);">🩺 Control: Nefrología c/3-6 meses</span>
+                <button class="btn btn-secondary btn-sm" onclick="seleccionarComoPrioridad('Riñones (Nefritis Lúpica)')" style="font-size: 11px;">
+                  ⭐ Priorizar
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. PIEL Y ROSTRO -->
+            <div class="zona-card" data-zona="piel" id="zona-card-piel">
+              <div class="zona-card-header">
+                <div class="zona-card-icon" style="background: #FDF2F8; color: #DB2777;">🦋</div>
+                <div>
+                  <div class="zona-card-title">Piel y Rostro (Fotosensibilidad)</div>
+                  <span class="zona-card-badge" style="background: #FDF2F8; color: #BE185D;">Fotoprotección 365 días</span>
+                </div>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🔬 ¿Por qué requiere cuidado especial?</div>
+                <p style="font-size: 0.825rem; color: #475569; line-height: 1.45;">
+                  La radiación ultravioleta (UVA y UVB) causa apoptosis de los queratinocitos de la piel, liberando material nuclear que el sistema inmune reconoce erróneamente como enemigo, desatando brotes cutáneos y sistémicos graves.
+                </p>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🛡️ Cuidados diarios esenciales:</div>
+                <ul class="zona-care-list">
+                  <li><strong>Protector solar FPS 50+:</strong> Aplicar todos los días del año (nublados o de lluvia) y reaplicar cada 2 a 3 horas.</li>
+                  <li><strong>Barrera física:</strong> Sombreros de ala ancha (mínimo 7 cm), anteojos con filtro UV400 y prendas de manga larga con filtro UPF 50+.</li>
+                  <li><strong>Evitar franja solar crítica:</strong> No exponerse directamente al sol entre las 10:00 y las 16:00 hs.</li>
+                  <li><strong>Luces interiores:</strong> Cuidarse de tubos fluorescentes sin filtro y lámparas halógenas que emiten radiación ultravioleta.</li>
+                </ul>
+              </div>
+
+              <div class="zona-alert-box">
+                <strong>🚨 Pauta de Alarma (Guardia Inmediata):</strong><br>
+                Eritema malar sobreelevado que arde intensamente, extensión rápida a cuello, escote o brazos, aparición de ampollas o lesiones discoides dolorosas con costras.
+              </div>
+
+              <div class="zona-card-footer">
+                <span style="font-size: 0.775rem; color: var(--text-muted);">🩺 Control: Dermatología / Reumatología</span>
+                <button class="btn btn-secondary btn-sm" onclick="seleccionarComoPrioridad('Piel y Rostro (Fotosensibilidad y Eritema Malar)')" style="font-size: 11px;">
+                  ⭐ Priorizar
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. ARTICULACIONES -->
+            <div class="zona-card" data-zona="articulaciones" id="zona-card-articulaciones">
+              <div class="zona-card-header">
+                <div class="zona-card-icon" style="background: #EFF6FF; color: #2563EB;">🦴</div>
+                <div>
+                  <div class="zona-card-title">Articulaciones (Manos y Extremidades)</div>
+                  <span class="zona-card-badge" style="background: #EFF6FF; color: #1D4ED8;">Poliartritis Inflamatoria</span>
+                </div>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🔬 ¿Por qué requiere cuidado especial?</div>
+                <p style="font-size: 0.825rem; color: #475569; line-height: 1.45;">
+                  La sinovitis autoinmune inflama la membrana de las articulaciones de manos, muñecas, codos y rodillas, produciendo rigidez matutina dolorosa e impotencia funcional. Puede generar deformidad reducible por laxitud tendinosa (artropatía de Jaccoud).
+                </p>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🛡️ Cuidados diarios esenciales:</div>
+                <ul class="zona-care-list">
+                  <li><strong>Alivio de rigidez:</strong> Ducha de agua tibia o compresas térmicas suaves al despertar para recuperar movilidad articular.</li>
+                  <li><strong>Ejercicio de bajo impacto:</strong> Caminatas suaves, natación o yoga adaptado para mantener el tono muscular y articular.</li>
+                  <li><strong>Ergonomía:</strong> Usar abridores de frascos y teclados ergonómicos; evitar forzar las manos en tareas de fuerza durante brotes.</li>
+                  <li><strong>Fármacos de base:</strong> Mantener la Hidroxicloroquina diaria para prevenir brotes articulares y sinovitis crónica.</li>
+                </ul>
+              </div>
+
+              <div class="zona-alert-box">
+                <strong>🚨 Pauta de Alarma (Guardia Inmediata):</strong><br>
+                Articulación intensamente caliente, roja, tumefacta con dolor insoportable e imposibilidad de apoyo, acompañada de fiebre (descartar artritis séptica urgente).
+              </div>
+
+              <div class="zona-card-footer">
+                <span style="font-size: 0.775rem; color: var(--text-muted);">🩺 Control: Reumatología y Kinesiología</span>
+                <button class="btn btn-secondary btn-sm" onclick="seleccionarComoPrioridad('Articulaciones (Poliartritis y Manos)')" style="font-size: 11px;">
+                  ⭐ Priorizar
+                </button>
+              </div>
+            </div>
+
+            <!-- 4. OJOS Y RETINA -->
+            <div class="zona-card" data-zona="ojos" id="zona-card-ojos">
+              <div class="zona-card-header">
+                <div class="zona-card-icon" style="background: #ECFDF5; color: #059669;">👁️</div>
+                <div>
+                  <div class="zona-card-title">Ojos y Retina (Vigilancia Visual)</div>
+                  <span class="zona-card-badge" style="background: #ECFDF5; color: #047857;">Monitoreo Antipalúdico</span>
+                </div>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🔬 ¿Por qué requiere cuidado especial?</div>
+                <p style="font-size: 0.825rem; color: #475569; line-height: 1.45;">
+                  El tratamiento continuo con Hidroxicloroquina exige controlar la mácula retiniana anualmente para asegurar que no haya acumulación tóxica. Además, el lupus cursa con frecuencia con sequedad ocular (queratoconjuntivitis seca por Sjögren secundario).
+                </p>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🛡️ Cuidados diarios esenciales:</div>
+                <ul class="zona-care-list">
+                  <li><strong>Lágrimas artificiales:</strong> Utilizar gotas oftálmicas lubricantes sin conservantes si hay sensación de arenilla o ardor.</li>
+                  <li><strong>Protección solar ocular:</strong> Anteojos oscuros con certificación UV400 siempre que salgas a la calle.</li>
+                  <li><strong>Higiene visual:</strong> Pausas visuales de descanso cada 20 minutos de uso de celular o computadora.</li>
+                  <li><strong>Examen oftalmológico anual:</strong> Campo visual computarizado 10-2 y tomografía OCT macular sin excepción.</li>
+                </ul>
+              </div>
+
+              <div class="zona-alert-box">
+                <strong>🚨 Pauta de Alarma (Guardia Inmediata):</strong><br>
+                Pérdida de nitidez en la visión central, dificultad para ver los colores rojo o verde, visión de destellos o manchas oscuras flotantes (escotomas).
+              </div>
+
+              <div class="zona-card-footer">
+                <span style="font-size: 0.775rem; color: var(--text-muted);">🩺 Control: Oftalmología Anual</span>
+                <button class="btn btn-secondary btn-sm" onclick="seleccionarComoPrioridad('Ojos y Retina (Vigilancia Antipalúdica)')" style="font-size: 11px;">
+                  ⭐ Priorizar
+                </button>
+              </div>
+            </div>
+
+            <!-- 5. CORAZÓN Y VASOS -->
+            <div class="zona-card" data-zona="corazon" id="zona-card-corazon">
+              <div class="zona-card-header">
+                <div class="zona-card-icon" style="background: #FFF1F2; color: #E11D48;">🫀</div>
+                <div>
+                  <div class="zona-card-title">Corazón y Sistema Cardiovascular</div>
+                  <span class="zona-card-badge" style="background: #FFF1F2; color: #BE123C;">Riesgo Pericárdico y Vascular</span>
+                </div>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🔬 ¿Por qué requiere cuidado especial?</div>
+                <p style="font-size: 0.825rem; color: #475569; line-height: 1.45;">
+                  La inflamación del LES puede afectar las capas del corazón (pericarditis o miocarditis) y acelera la formación de placas ateroscleróticas. Los pacientes con anticuerpos antifosfolípidos positivos tienen mayor riesgo de trombosis arteriales o venosas.
+                </p>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🛡️ Cuidados diarios esenciales:</div>
+                <ul class="zona-care-list">
+                  <li><strong>Perfil lipídico:</strong> Mantener colesterol LDL bajo control y realizar análisis periódicos.</li>
+                  <li><strong>Prohibido fumar:</strong> El tabaco triplica el riesgo de eventos cardiovasculares e inactiva la hidroxicloroquina.</li>
+                  <li><strong>Monitoreo de presión:</strong> Controlar la hipertensión arterial como factor de riesgo primario.</li>
+                  <li><strong>Actividad cardiovascular regular:</strong> 30 minutos de caminata aeróbica la mayoría de los días.</li>
+                </ul>
+              </div>
+
+              <div class="zona-alert-box">
+                <strong>🚨 Pauta de Alarma (Guardia Inmediata):</strong><br>
+                Dolor punzante o punzadas intensas en el centro del pecho que empeoran al respirar hondo o al acostarse boca arriba y mejoran al inclinarse hacia adelante (pericarditis), falta de aire súbita o dolor en una sola pierna con hinchazón.
+              </div>
+
+              <div class="zona-card-footer">
+                <span style="font-size: 0.775rem; color: var(--text-muted);">🩺 Control: Cardiología y Reumatología</span>
+                <button class="btn btn-secondary btn-sm" onclick="seleccionarComoPrioridad('Corazón y Sistema Cardiovascular')" style="font-size: 11px;">
+                  ⭐ Priorizar
+                </button>
+              </div>
+            </div>
+
+            <!-- 6. BOCA Y CABELLO -->
+            <div class="zona-card" data-zona="mucosas" id="zona-card-mucosas">
+              <div class="zona-card-header">
+                <div class="zona-card-icon" style="background: #FEF3C7; color: #D97706;">👄</div>
+                <div>
+                  <div class="zona-card-title">Boca, Mucosas y Cuero Cabelludo</div>
+                  <span class="zona-card-badge" style="background: #FEF3C7; color: #B45309;">Aftas Mucosas y Alopecia</span>
+                </div>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🔬 ¿Por qué requiere cuidado especial?</div>
+                <p style="font-size: 0.825rem; color: #475569; line-height: 1.45;">
+                  Las úlceras orales indoloras en paladar o encías son marcadores clásicos de actividad de lupus. Durante los brotes, la inflamación sistémica puede desencadenar caída difusa de cabello (efluvio telógeno) o placas circulares con pérdida folicular (lupus discoide).
+                </p>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🛡️ Cuidados diarios esenciales:</div>
+                <ul class="zona-care-list">
+                  <li><strong>Cepillado dental suave:</strong> Utilizar cepillos con cerdas extrasuaves para no traumatizar las encías.</li>
+                  <li><strong>Colutorios sin alcohol:</strong> Enjuagues con agua tibia y bicarbonato o antisépticos bucales libres de alcohol.</li>
+                  <li><strong>Cuidado capilar sin químicos agresivos:</strong> Champú con pH neutro 5.5; evitar tinturas con amoníaco o alisados en brotes.</li>
+                  <li><strong>Evitar calor térmico:</strong> No usar secadores de pelo a temperatura máxima ni planchitas directamente sobre la raíz.</li>
+                </ul>
+              </div>
+
+              <div class="zona-alert-box">
+                <strong>🚨 Pauta de Alarma (Guardia Inmediata):</strong><br>
+                Aparición simultánea de múltiples llagas orales con dolor que impide la hidratación y alimentación, sangrado gingival severo o pérdida rápida de cabello en parches redondos con descamación y cicatriz.
+              </div>
+
+              <div class="zona-card-footer">
+                <span style="font-size: 0.775rem; color: var(--text-muted);">🩺 Control: Odontología y Dermatología</span>
+                <button class="btn btn-secondary btn-sm" onclick="seleccionarComoPrioridad('Boca, Mucosas y Cuero Cabelludo')" style="font-size: 11px;">
+                  ⭐ Priorizar
+                </button>
+              </div>
+            </div>
+
+            <!-- 7. SISTEMA NERVIOSO / LUPUS FOG -->
+            <div class="zona-card" data-zona="cognitivo" id="zona-card-cognitivo">
+              <div class="zona-card-header">
+                <div class="zona-card-icon" style="background: #F3E8FF; color: #7C3AED;">🧠</div>
+                <div>
+                  <div class="zona-card-title">Sistema Nervioso y Salud Cognitiva</div>
+                  <span class="zona-card-badge" style="background: #F3E8FF; color: #6D28D9;">Soporte Lupus Fog y Sueño</span>
+                </div>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🔬 ¿Por qué requiere cuidado especial?</div>
+                <p style="font-size: 0.825rem; color: #475569; line-height: 1.45;">
+                  La niebla lúpica o "Lupus Fog" afecta a la memoria a corto plazo, la velocidad de procesamiento y la concentración mental. Es una manifestación biológica del LES y la inflamación de bajo grado, no un fallo personal o falta de voluntad.
+                </p>
+              </div>
+
+              <div class="zona-section-block">
+                <div class="zona-section-title">🛡️ Cuidados diarios esenciales:</div>
+                <ul class="zona-care-list">
+                  <li><strong>Higiene del sueño estricta:</strong> Dormir 8 horas diarias; mantener el dormitorio a oscuras y apagar pantallas 1 hora antes.</li>
+                  <li><strong>Descarga cognitiva:</strong> Usar LupusSync para registrar tomas y citas en vez de sobrecargar la memoria.</li>
+                  <li><strong>Fraccionamiento de tareas:</strong> Aplicar técnica Pomodoro (bloques de 25 minutos con 5 minutos de pausa activa).</li>
+                  <li><strong>Gestión del estrés:</strong> Respiración diafragmática y pausas conscientes durante la jornada laboral.</li>
+                </ul>
+              </div>
+
+              <div class="zona-alert-box">
+                <strong>🚨 Pauta de Alarma (Guardia Inmediata):</strong><br>
+                Cefalea súbita e insoportable ("en trueno"), confusión aguda desorientada, pérdida de fuerza o parálisis en un brazo/pierna, dificultad repentina para articular palabras o convulsiones (urgencia neurológica inmediata).
+              </div>
+
+              <div class="zona-card-footer">
+                <span style="font-size: 0.775rem; color: var(--text-muted);">🩺 Control: Neurología y Psiquiatría</span>
+                <button class="btn btn-secondary btn-sm" onclick="seleccionarComoPrioridad('Sistema Nervioso y Salud Cognitiva')" style="font-size: 11px;">
+                  ⭐ Priorizar
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- DIARIO DE CUIDADO Y REGISTRO DE SENSACIONES DE LA ZONA -->
+          <div class="card" style="margin-top: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-icon" style="background: #FAF5FF; color: #7C3AED;">📝</div>
+                <div>
+                  <h3 class="card-title">Notas de Cuidado Personal para tu Zona</h3>
+                  <p class="card-subtitle">Registra cómo sentiste tu órgano o zona prioritaria para conversarlo en tu próxima consulta en el Hospital Posadas</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <textarea id="txtNotaZonaEspecial" class="custom-textarea" rows="3" placeholder="Ej: Hoy sentí leve pesadez en las muñecas por la mañana. Apliqué fotoprotector cada 3 horas y medí mi presión (118/76)..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+              <button class="btn btn-primary btn-sm" onclick="guardarNotaZonaEspecial()">
+                <span>💾 Guardar Nota en Historia Clínica</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+
+    <!-- NAVEGACIÓN MÓVIL INFERIOR -->
+    <nav class="mobile-bottom-nav">
+      <div class="mobile-nav-items">
+        <button class="mobile-nav-item active" data-tab="historia" onclick="switchTab('historia')">
+          <span class="mobile-icon">🩺</span>
+          <span>Historia</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="medicacion" onclick="switchTab('medicacion')">
+          <span class="mobile-icon">💊</span>
+          <span>Fármacos</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="zonas" onclick="switchTab('zonas')">
+          <span class="mobile-icon">🛡️</span>
+          <span>Zonas</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="turnos" onclick="switchTab('turnos')">
+          <span class="mobile-icon">📅</span>
+          <span>Turnos</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="historial" onclick="switchTab('historial')">
+          <span class="mobile-icon">📈</span>
+          <span>Síntomas</span>
+        </button>
+        <button class="mobile-nav-item mobile-sos" data-tab="emergencias" onclick="switchTab('emergencias')">
+          <span class="mobile-icon">🚨</span>
+          <span>Guardia</span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- =========================================================================
+       MODALES DE LA APLICACIÓN
+       ========================================================================= -->
+
+  <!-- MODAL: EDITAR PERFIL DE PACIENTE (CON LOS CAMPOS DE LA IMAGEN) -->
+  <div class="modal-overlay" id="modalEditProfile">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Editar Ficha de Paciente</h3>
+        <button class="modal-close-btn" onclick="closeModal('modalEditProfile')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="editProfileForm" onsubmit="handleSaveProfile(event)">
+          <div class="form-group">
+            <label class="form-label" for="editNombre">Nombre y Apellido</label>
+            <input type="text" id="editNombre" class="form-control" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="editDni">DNI / Documento</label>
+              <input type="text" id="editDni" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editTelefono">Teléfono</label>
+              <input type="tel" id="editTelefono" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editDireccion">Dirección</label>
+            <input type="text" id="editDireccion" class="form-control" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="editDiagnostico">Diagnóstico</label>
+              <input type="text" id="editDiagnostico" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editGrupoSangre">Grupo Sanguíneo</label>
+              <input type="text" id="editGrupoSangre" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editMedico">Médico Tratante / Cabecera</label>
+            <input type="text" id="editMedico" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editContactoEmergencia">Contacto de Emergencia (Nombre y Teléfono)</label>
+            <input type="text" id="editContactoEmergencia" class="form-control" placeholder="Ej: Carlos Fernández (+54 11 5591-3342)">
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalEditProfile')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AGREGAR MEDICAMENTO AL PLAN FARMACOLÓGICO -->
+  <div class="modal-overlay" id="modalAddMed">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Agregar Fármaco al Plan</h3>
+        <button class="modal-close-btn" onclick="closeModal('modalAddMed')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="addMedForm" onsubmit="handleSaveNewMed(event)">
+          <div class="form-group">
+            <label class="form-label" for="newMedNombre">Nombre del Medicamento</label>
+            <input type="text" id="newMedNombre" class="form-control" placeholder="Ej: Hidroxicloroquina 200mg" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newMedDosis">Dosis</label>
+              <input type="text" id="newMedDosis" class="form-control" placeholder="Ej: 200 mg" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newMedCategoria">Categoría</label>
+              <select id="newMedCategoria" class="form-control">
+                <option value="Inmunomodulador">Inmunomodulador</option>
+                <option value="Corticosteroide">Corticosteroide</option>
+                <option value="Inmunosupresor">Inmunosupresor</option>
+                <option value="Terapia Biológica">Terapia Biológica</option>
+                <option value="Suplemento Osteoprotector">Suplemento</option>
+                <option value="Gastroprotector">Gastroprotector</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newMedFrecuencia">Frecuencia</label>
+              <input type="text" id="newMedFrecuencia" class="form-control" placeholder="Ej: 1 vez al día" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newMedHorario">Horario habitual</label>
+              <input type="text" id="newMedHorario" class="form-control" placeholder="Ej: 08:00 hs o Con la cena" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="newMedIndicacion">Indicación / Motivo</label>
+            <input type="text" id="newMedIndicacion" class="form-control" placeholder="Ej: Mantenimiento LES / Control articular">
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalAddMed')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Medicamento</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AGREGAR TURNO MÉDICO -->
+  <div class="modal-overlay" id="modalAddTurno">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Agendar Turno Médico</h3>
+        <button class="modal-close-btn" onclick="closeModal('modalAddTurno')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="addTurnoForm" onsubmit="handleSaveNewTurno(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newTurnoEspecialidad">Especialidad</label>
+              <select id="newTurnoEspecialidad" class="form-control" required>
+                <option value="Reumatología">Reumatología</option>
+                <option value="Oftalmología">Oftalmología (Fondo de Ojos)</option>
+                <option value="Nefrología">Nefrología</option>
+                <option value="Dermatología">Dermatología</option>
+                <option value="Cardiología">Cardiología</option>
+                <option value="Laboratorio Clínico">Laboratorio Clínico</option>
+                <option value="Clínica Médica">Clínica Médica</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newTurnoDoctor">Profesional / Médico</label>
+              <input type="text" id="newTurnoDoctor" class="form-control" placeholder="Ej: Dra. Marcela Rossi" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="newTurnoCentro">Centro de Salud / Hospital</label>
+            <input type="text" id="newTurnoCentro" class="form-control" placeholder="Ej: Hospital de Clínicas - Consultorio 14" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newTurnoFecha">Fecha</label>
+              <input type="date" id="newTurnoFecha" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newTurnoHora">Hora</label>
+              <input type="time" id="newTurnoHora" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="newTurnoRecordatorio">Indicaciones o estudios a llevar</label>
+            <input type="text" id="newTurnoRecordatorio" class="form-control" placeholder="Ej: Llevar análisis de orina de 24hs y reporte de síntomas">
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalAddTurno')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Agendar Turno</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ACTUALIZAR NOTA DE EVOLUCIÓN MÉDICA -->
+  <div class="modal-overlay" id="modalEditEvolucion">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Actualizar Nota de Evolución</h3>
+        <button class="modal-close-btn" onclick="closeModal('modalEditEvolucion')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="editEvolucionForm" onsubmit="handleSaveEvolucion(event)">
+          <div class="form-group">
+            <label class="form-label" for="txtEvolucionModal">Evolución Clínica y Pautas del Reumatólogo</label>
+            <textarea id="txtEvolucionModal" class="form-control" style="min-height: 140px;" required></textarea>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalEditEvolucion')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Actualizar Nota</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GESTIÓN DE BASE DE DATOS JSON -->
+  <div class="modal-overlay" id="modalJsonDatabase">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">📁 Base de Datos en Archivos JSON</h3>
+        <button class="modal-close-btn" onclick="closeModal('modalJsonDatabase')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          LupusSync opera con una arquitectura de <strong>almacenamiento en archivos .json locales</strong> (carpeta <code>data/</code>). Toda tu información médica está guardada en tu propio equipo, sin costos de suscripción a Google Firebase y sin depender de conexión a internet.
+        </p>
+
+        <div style="background: #FAF5FF; border: 1px solid #E9D5FF; border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+          <strong style="font-size: 0.85rem; color: #6B21A8; display: block; margin-bottom: 4px;">
+            📂 Archivos activos en disco:
+          </strong>
+          <span style="font-size: 0.78rem; color: #4C1D95; line-height: 1.5; display: block;">
+            • <code>paciente.json</code> (Ficha de Lucía Fernández)<br>
+            • <code>medicamentos.json</code> (Vademécum y adherencia)<br>
+            • <code>turnos.json</code> (Agenda médica Posadas)<br>
+            • <code>sintomas.json</code> (Registro de brotes y dolor)<br>
+            • <code>historia_clinica.json</code> (Laboratorios y EULAR)
+          </span>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary" onclick="handleForceSaveJsonDisk()">
+            <span>💾 Guardar Cambios en Disco</span>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="handleExportBackupJSON()">
+            <span>📥 Descargar Copia JSON</span>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="handleResetLocalDemoData()">
+            <span>🔄 Restablecer Demostración</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ESCÁNER OCR Y GENERADOR TASY (HOSPITAL POSADAS - ETAPA 2) -->
+  <div class="modal-overlay" id="modalOcrScanner">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">📷 Lector OCR Clínico y Generador TASY</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            Digitalización de informes de laboratorio impresos para inserción dinámica en el sistema TASY del Hospital Posadas.
+          </p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalOcrScanner')">✕</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- DROPZONE / CAPTURA DE CÁMARA -->
+        <div class="ocr-dropzone" id="ocrDropzone" onclick="document.getElementById('ocrFileInput').click()">
+          <div class="ocr-laser" id="ocrLaser"></div>
+          <span style="font-size: 32px; display: block; margin-bottom: 6px;">📄📸</span>
+          <strong style="color: var(--primary-violet); font-size: 13.5px; display: block;">
+            Haz clic aquí para tomar una foto del informe o seleccionar un archivo
+          </strong>
+          <span style="font-size: 11.5px; color: var(--text-muted); display: block; margin-top: 4px;">
+            Soporta fotos de celular, escaneos JPG, PNG y documentos clínicos en papel.
+          </span>
+          <input type="file" id="ocrFileInput" accept="image/*" style="display: none;" onchange="handleOcrFileUpload(event)">
+        </div>
+
+        <!-- PRESETS RÁPIDOS DEL HOSPITAL POSADAS PARA PRUEBA INMEDIATA -->
+        <div style="margin-top: 14px;">
+          <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">
+            ⚡ O carga una muestra de informe oficial del Hospital Posadas para probar el OCR:
+          </label>
+          <div class="ocr-presets-row">
+            <button type="button" class="ocr-preset-btn" onclick="loadOcrPreset('inmuno')">
+              🧪 Laboratorio Inmunológico (ANA 1:640, Anti-dsDNA 42, C3 82)
+            </button>
+            <button type="button" class="ocr-preset-btn" onclick="loadOcrPreset('orina')">
+              💧 Orina 24hs / Proteinuria (0.18 g/24h)
+            </button>
+            <button type="button" class="ocr-preset-btn" onclick="loadOcrPreset('receta')">
+              💊 Receta Médica Reumatología (Dra. Leila Romina Ferreira)
+            </button>
+          </div>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN OCR -->
+        <div style="display: flex; gap: 8px; margin-top: 12px;">
+          <button type="button" class="btn btn-primary" id="btnEjecutarOcr" onclick="ejecutarOcr()" style="flex: 1;">
+            <span>🔍 Iniciar Reconocimiento Óptico (OCR)</span>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="formatearOcrParaTasy()">
+            <span>✨ Formatear para TASY</span>
+          </button>
+        </div>
+
+        <!-- MEDIDOR DE CONFIANZA -->
+        <div id="ocrConfidenceWrap" style="display: none; margin-top: 12px;">
+          <div class="confidence-meter">
+            <span style="color: #475569;">Nivel de Confianza OCR:</span>
+            <div class="confidence-bar">
+              <div class="confidence-bar-fill" id="ocrConfidenceFill"></div>
+            </div>
+            <span id="ocrConfidenceVal" style="color: #059669;">98.8%</span>
+          </div>
+        </div>
+
+        <!-- TEXTO EXTRAÍDO EDITABLE -->
+        <div style="margin-top: 14px;">
+          <label class="form-label" for="ocrExtractedText" style="display: flex; justify-content: space-between;">
+            <span>Texto Plano Extraído por OCR (Editable para corrección):</span>
+            <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Validación Pre-TASY</span>
+          </label>
+          <textarea id="ocrExtractedText" class="custom-textarea" rows="4" placeholder="El texto reconocido por OCR aparecerá aquí al escanear o seleccionar un informe..."></textarea>
+        </div>
+
+        <!-- CONTENEDOR SALIDA FORMATEADA PARA TASY -->
+        <div id="ocrTasyContainer" style="display: none; margin-top: 14px;">
+          <label style="font-size: 12.5px; font-weight: 700; color: var(--primary-violet); display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <span>🏥 Formato Estandarizado HCE Sistema TASY (Hospital Posadas):</span>
+            <span style="font-size: 11px; color: #059669; font-weight: 700; background: #ECFDF5; padding: 2px 8px; border-radius: 6px;">Listo para Pegar</span>
+          </label>
+          <div id="ocrTasyCode" class="tasy-code-container"></div>
+          
+          <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="copiarTextoOcrTasy()">
+              <span>📋 Copiar Bloque TASY</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="importarOcrAHistoriaClinica()">
+              <span>📥 Importar Valores a mi Historia Clínica</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalOcrScanner')">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: VISOR DE TEXTO PLANO ESTANDARIZADO TASY (HOSPITAL POSADAS) -->
+  <div class="modal-overlay" id="modalTasyView">
+    <div class="modal-content" style="max-width: 650px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">📋 Bloque Estandarizado para Sistema TASY</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            Hospital Nacional Profesor Alejandro Posadas • Historia Clínica Electrónica (HCE)
+          </p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalTasyView')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.825rem; color: var(--text-muted); margin-bottom: 10px;">
+          Este bloque de texto estructurado está formateado según las especificaciones de interoperabilidad de la Etapa 2 para el pegado directo en los campos de evolución y farmacovigilancia de TASY:
+        </p>
+        <div id="tasyFullTextBlock" class="tasy-code-container"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalTasyView')">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="copiarTextoTasy()">📋 Copiar al Portapapeles</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: INDICACIONES Y PREPARACIÓN DE TURNO MÉDICO -->
+  <div class="modal-overlay" id="modalTurnoInfo">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="turnoInfoTitle">ℹ️ Pautas de Preparación para el Turno</h3>
+        <button class="modal-close-btn" onclick="closeModal('modalTurnoInfo')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="turnoInfoContent" style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);"></div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-primary" onclick="closeModal('modalTurnoInfo')">Entendido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRO DE MOTIVO DE NO TOMA DE MEDICACIÓN -->
+  <div class="modal-overlay" id="modalNoTomoMed">
+    <div class="modal-content" style="max-width: 580px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">💊 ¿Por qué no tomaste tu medicación?</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            Tu bienestar es lo primero. Cuéntanos el motivo para registrar tu adherencia y brindarte orientación:
+          </p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalNoTomoMed')">✕</button>
+      </div>
+      <div class="modal-body">
+        
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 13.5px; font-weight: 700; color: #0F172A;" id="modalNoTomoMedNombre">Medicamento</span>
+          <span class="badge badge-purple" id="modalNoTomoMedDosis">Dosis</span>
+        </div>
+
+        <p style="font-size: 0.825rem; font-weight: 700; color: #475569; margin-bottom: 8px;">
+          Selecciona una de las 3 razones:
+        </p>
+
+        <!-- OPCIONES DE MOTIVO -->
+        <div class="reason-options-grid">
+          
+          <!-- OPCIÓN 1: FALTA DE DINERO -->
+          <div class="reason-option-card" onclick="confirmarMotivoNoToma('Falta de dinero')">
+            <div class="reason-option-icon">💰</div>
+            <div class="reason-option-content">
+              <div class="reason-option-title">Falta de dinero</div>
+              <div class="reason-option-desc">
+                No pude comprar o retirar la pastilla debido a dificultades económicas o costo de la farmacia.
+              </div>
+              <div class="reason-option-tip">
+                ℹ️ <strong>Ayuda disponible:</strong> El Banco de Drogas de la Provincia de Buenos Aires y el Hospital Posadas disponen de programas de cobertura gratuita de inmunosupresores e hidroxicloroquina. Consulta en Servicio Social.
+              </div>
+            </div>
+          </div>
+
+          <!-- OPCIÓN 2: POR QUERER PROBAR OPCIONES NATURALES -->
+          <div class="reason-option-card" onclick="confirmarMotivoNoToma('Por querer probar opciones naturales')">
+            <div class="reason-option-icon">🌿</div>
+            <div class="reason-option-content">
+              <div class="reason-option-title">Por querer probar opciones naturales</div>
+              <div class="reason-option-desc">
+                Deseo intentar tratamientos caseros, fitoterapia, hierbas o terapias alternativas naturistas.
+              </div>
+              <div class="reason-option-tip">
+                ⚠️ <strong>Alerta médica Dra. Ferreira:</strong> Varios productos naturales (Alfalfa, Equinácea, Ginseng) estimulan el sistema inmune y desatan brotes lúpicos severos. NUNCA suspendas tu tratamiento basal sin acordarlo con tu reumatóloga.
+              </div>
+            </div>
+          </div>
+
+          <!-- OPCIÓN 3: POR FATIGA U OLVIDO -->
+          <div class="reason-option-card" onclick="confirmarMotivoNoToma('Por fatiga u olvido')">
+            <div class="reason-option-icon">🧠</div>
+            <div class="reason-option-content">
+              <div class="reason-option-title">Por fatiga u olvido</div>
+              <div class="reason-option-desc">
+                Olvidé la toma por agotamiento extremo, falta de energía física o niebla mental (Lupus Fog).
+              </div>
+              <div class="reason-option-tip">
+                💜 <strong>No te sientas culpable:</strong> La niebla mental es un síntoma frecuente de la enfermedad. Te recomendamos activar las alertas en tu celular, usar pastilleros semanales y pedirle a tu contacto de apoyo que te recuerde la toma.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid #F1F5F9;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('modalNoTomoMed')">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="marcarComoTomadaDesdeModal()" style="background: #16A34A;">
+            <span>✓ ¿Ya la tomaste? Marcar como Tomada</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ABRIR EN CUALQUIER DISPOSITIVO Y SUBIR A LA WEB -->
+  <div class="modal-overlay" id="modalPublicarWeb">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">🌐 Abrir LupusSync desde Cualquier Dispositivo</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            Abre la app en tu teléfono, tablet o súbela como sitio web real en internet 100% gratis.
+          </p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalPublicarWeb')">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- MÉTODO 1: ABRIR EN CELULAR POR WI-FI LOCAL -->
+        <div class="publicar-card highlight">
+          <span class="publicar-badge">📱 Rápido: En tu misma red Wi-Fi</span>
+          <h4 style="font-size: 1rem; font-weight: 800; color: #0F172A; margin-bottom: 6px;">
+            Abrir en tu teléfono celular o tablet ahora mismo
+          </h4>
+          <p style="font-size: 0.825rem; color: #475569; margin-bottom: 8px;">
+            Si tu celular y esta computadora están conectados a la misma red Wi-Fi, abre el navegador (Chrome o Safari) en tu teléfono e ingresa esta dirección:
+          </p>
+          <div class="ip-banner-box">
+            <span id="labelNetworkIp">http://localhost:3000</span>
+            <button class="btn btn-sm btn-secondary" onclick="copiarUrlNetwork()" style="background: rgba(255,255,255,0.15); color: #fff; border: none; font-size: 11px;">
+              📋 Copiar
+            </button>
+          </div>
+          <small style="color: #64748B; font-size: 0.75rem;">
+            💡 Asegúrate de que el servidor esté ejecutándose con <code>iniciar.bat</code> o <code>node server.js</code>.
+          </small>
+        </div>
+
+        <div class="publicar-grid">
+
+          <!-- MÉTODO 2: NETLIFY DROP -->
+          <div class="publicar-card">
+            <span class="publicar-badge" style="background: #059669;">☁️ En la Web: Netlify Drop (30 seg)</span>
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;">
+              Publicar gratis sin instalar nada
+            </h4>
+            <div class="publicar-step-item">
+              <span class="publicar-step-num">1</span>
+              <div>Abre en tu navegador: <a href="https://app.netlify.com/drop" target="_blank" style="color: #0284C7; font-weight: 700;">app.netlify.com/drop</a></div>
+            </div>
+            <div class="publicar-step-item">
+              <span class="publicar-step-num">2</span>
+              <div>Arrastra la carpeta <strong>lupusSync</strong> al círculo en pantalla.</div>
+            </div>
+            <div class="publicar-step-item">
+              <span class="publicar-step-num">3</span>
+              <div>¡Listo! Te dará un enlace real (ej: <code>https://lupussync.netlify.app</code>) para abrir en cualquier parte del mundo.</div>
+            </div>
+          </div>
+
+          <!-- MÉTODO 3: VERCEL O GITHUB -->
+          <div class="publicar-card">
+            <span class="publicar-badge" style="background: #7C3AED;">🚀 Vercel / GitHub Pages</span>
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;">
+              Para desarrolladores y proyectos
+            </h4>
+            <div class="publicar-step-item">
+              <span class="publicar-step-num">1</span>
+              <div>Ya incluimos el archivo <code>vercel.json</code> listo en la carpeta raíz.</div>
+            </div>
+            <div class="publicar-step-item">
+              <span class="publicar-step-num">2</span>
+              <div>Ejecuta en terminal <code>npx vercel</code> o vincula tu repositorio en <a href="https://vercel.com" target="_blank" style="color: #0284C7; font-weight: 700;">vercel.com</a>.</div>
+            </div>
+            <div class="publicar-step-item">
+              <span class="publicar-step-num">3</span>
+              <div>Tu aplicación queda desplegada con certificado SSL y disponible en todos los dispositivos.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="background: #F1F5F9; border-radius: 12px; padding: 12px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <span style="font-size: 0.8rem; color: #334155;">
+            📄 También creamos la guía completa detallada en el archivo <strong>SUBIR_A_INTERNET.md</strong>.
+          </span>
+          <button type="button" class="btn btn-primary btn-sm" onclick="closeModal('modalPublicarWeb')">
+            ¡Entendido!
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICACIÓN FLOTANTE (TOAST) -->
+  <div id="toastNotification" class="toast-notification"></div>
+
+  <!-- SCRIPTS LUPUSSYNC (BASE DE DATOS JSON - CARGA MODULAR ROBUSTA) -->
+  <script type="module" src="data-manager.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "uid": "demo-patient-001",
+  "email": "lucia.fernandez@lupussync.com",
+  "nombre": "Lucía Belén Fernández",
+  "dni": "38.452.120",
+  "direccion": "Av. Corrientes 3450, Piso 4 B, CABA",
+  "telefono": "+54 11 4821-9932",
+  "fechaNacimiento": "1994-08-14",
+  "edad": 32,
+  "grupoSanguineo": "A+",
+  "peso": "61.5 kg",
+  "presion": "118/76 mmHg",
+  "pulso": "72 lpm",
+  "temperatura": "36.5 °C",
+  "alergias": "Sulfamidas (Cotrimoxazol/Bactrim - brote cutáneo severo), Penicilina (intolerancia digestiva)",
+  "zonaPrioritaria": "Riñones (Nefritis Lúpica)",
+  "diagnosticoPrincipal": "Lupus Eritematoso Sistémico (LES)",
+  "fechaDiagnostico": "Mayo 2021",
+  "medicoCabecera": "Dra. Leila Romina Ferreira (Reumatología - Hospital Posadas)",
+  "centroAtencion": "Hospital Nacional Profesor Alejandro Posadas",
+  "contactoEmergencia": {
+    "nombre": "Carlos Alberto Fernández",
+    "relacion": "Padre",
+    "telefono": "+54 11 5591-3342"
+  }
+}

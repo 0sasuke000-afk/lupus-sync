@@ -1,0 +1,68 @@
+[
+  {
+    "id": "tur-1",
+    "especialidad": "Reumatología",
+    "profesional": "Dra. Leila Romina Ferreira",
+    "centro": "Hospital Nacional Profesor Alejandro Posadas (Consultorios)",
+    "direccion": "Av. Marconi y Pdte. Illia, El Palomar",
+    "fecha": "2026-11-05",
+    "hora": "14:30",
+    "estado": "Pendiente",
+    "recordatorio": "Llevar carnet LupusSync, analíticas de C3/C4 y reporte exportado para TASY."
+  },
+  {
+    "id": "tur-2",
+    "especialidad": "Reumatología",
+    "profesional": "Dr. Gastón Silva",
+    "centro": "Hospital Posadas / Sector Ambulatorio",
+    "direccion": "Av. Marconi y Marconi, El Palomar",
+    "fecha": "2026-11-18",
+    "hora": "16:00",
+    "estado": "Pendiente",
+    "recordatorio": "Control bimensual de mantenimiento y ajuste de dosis corticoide."
+  },
+  {
+    "id": "tur-3",
+    "especialidad": "Oftalmología",
+    "profesional": "Dra. Inés Martínez",
+    "centro": "Instituto Oftalmológico Central",
+    "direccion": "Av. San Juan 2021, CABA",
+    "fecha": "2026-11-26",
+    "hora": "09:15",
+    "estado": "Pendiente",
+    "recordatorio": "Fondo de ojo y campo visual 10-2 por antipalúdicos. Asistir con acompañante por dilatación."
+  },
+  {
+    "id": "tur-4",
+    "especialidad": "Nefrología",
+    "profesional": "Dr. Alejandro Méndez",
+    "centro": "Hospital Posadas / Servicio de Nefrología",
+    "direccion": "Av. Marconi y Pdte. Illia, Piso 3",
+    "fecha": "2026-12-04",
+    "hora": "10:30",
+    "estado": "Pendiente",
+    "recordatorio": "Llevar bidón de recolección de orina de 24 horas y clearance de creatinina."
+  },
+  {
+    "id": "tur-5",
+    "especialidad": "Psiquiatría / Salud Mental",
+    "profesional": "Dr. Martín Echeverría",
+    "centro": "Hospital Posadas / Salud Mental",
+    "direccion": "Av. Marconi y Pdte. Illia, El Palomar",
+    "fecha": "2026-12-11",
+    "hora": "11:00",
+    "estado": "Pendiente",
+    "recordatorio": "Evaluación de soporte cognitivo por episodios de Lupus Fog y compatibilidad psicofarmacológica."
+  },
+  {
+    "id": "tur-6",
+    "especialidad": "Laboratorio Central",
+    "profesional": "Bioq. Gabriela Torres",
+    "centro": "Hospital Posadas - Laboratorio de Análisis Clínicos",
+    "direccion": "Av. Marconi y Pdte. Illia, Planta Baja",
+    "fecha": "2026-12-18",
+    "hora": "07:30",
+    "estado": "Confirmado",
+    "recordatorio": "Ayuno de 12 horas estricto. Llevar muestra de primera orina matutina en frasco estéril."
+  }
+]

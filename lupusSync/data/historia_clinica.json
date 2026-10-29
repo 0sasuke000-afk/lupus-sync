@@ -1,0 +1,74 @@
+{
+  "tipoLupus": "Lupus Eritematoso Sistémico (LES)",
+  "criteriosDiagnostico": "Criterios EULAR/ACR 2019: ANA+ (1:640 moteado), Anti-dsDNA+ (42 UI/mL), C3 bajo (82 mg/dL), Rash malar en mariposa fotosensible y Artritis simétrica de manos. En seguimiento por Dra. Leila Romina Ferreira.",
+  "compromisoOrganico": [
+    "Zona prioritaria de cuidado: Riñones (Nefritis Lúpica)",
+    "Articular: Poliartritis episódica en manos y muñecas (controlada con HCQ)",
+    "Cutáneo: Rash malar fotosensible y lesiones subagudas en escote",
+    "Renal: Nefritis Lúpica Clase II (Mesangial) en remisión sostenida (Hospital Posadas)",
+    "Hematológico: Leve anemia de enfermedad crónica (Hb 11.9 g/dL)",
+    "Cognitivo: Cuadros transitorios de Lupus Fog (niebla mental / lentitud de procesamiento)"
+  ],
+  "alergias": "Sulfamidas (Cotrimoxazol/Bactrim - brote cutáneo severo), Penicilina (intolerancia digestiva)",
+  "antecedentesPersonales": "Tiroiditis autoinmune compensada con Levotiroxina 50 mcg/día.",
+  "antecedentesFamiliares": "Madre con Artritis Reumatoide. Tía materna con Síndrome de Sjögren.",
+  "signosVitalesActuales": {
+    "presion": "118/76 mmHg",
+    "pulso": "72 lpm",
+    "temperatura": "36.5 °C",
+    "peso": "61.5 kg",
+    "fecha": "2026-10-29"
+  },
+  "laboratorioReciente": [
+    {
+      "parametro": "Anticuerpos ANA",
+      "valor": "1:640 (Patrón Moteado)",
+      "fecha": "2026-10-15",
+      "estado": "Positivo",
+      "normal": "< 1:80"
+    },
+    {
+      "parametro": "Anti-dsDNA",
+      "valor": "42 UI/mL",
+      "fecha": "2026-10-15",
+      "estado": "Elevado",
+      "normal": "< 25 UI/mL"
+    },
+    {
+      "parametro": "Complemento C3",
+      "valor": "82 mg/dL",
+      "fecha": "2026-10-15",
+      "estado": "Bajo",
+      "normal": "90 - 180 mg/dL"
+    },
+    {
+      "parametro": "Complemento C4",
+      "valor": "13 mg/dL",
+      "fecha": "2026-10-15",
+      "estado": "Normal-Bajo",
+      "normal": "10 - 40 mg/dL"
+    },
+    {
+      "parametro": "Proteinuria 24hs (TASY)",
+      "valor": "0.18 g/24h",
+      "fecha": "2026-10-15",
+      "estado": "Normal",
+      "normal": "< 0.30 g/24h"
+    },
+    {
+      "parametro": "Hemoglobina",
+      "valor": "11.9 g/dL",
+      "fecha": "2026-10-15",
+      "estado": "Controlado",
+      "normal": "12.0 - 15.5 g/dL"
+    },
+    {
+      "parametro": "Creatinina Plasmática",
+      "valor": "0.85 mg/dL",
+      "fecha": "2026-10-15",
+      "estado": "Normal",
+      "normal": "0.6 - 1.1 mg/dL"
+    }
+  ],
+  "evolucionMedica": "Hospital Posadas - Consultorio de Reumatología (Dra. Leila Romina Ferreira): Paciente en excelente respuesta terapéutica con Hidroxicloroquina 200mg/día y Meprednisona 5mg/día en dosis mínima de mantenimiento. Sin reactivación de eritema malar en los últimos 90 días. Se insiste en fotoprotección FPS 50+ cada 3 horas, control oftalmológico anual de retina y preparación de informe para inserción en sistema TASY."
+}

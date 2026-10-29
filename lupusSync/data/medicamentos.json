@@ -1,0 +1,62 @@
+[
+  {
+    "id": "med-1",
+    "nombre": "Hidroxicloroquina (Plaquinol)",
+    "dosis": "200 mg",
+    "presentacion": "Comprimidos recubiertos",
+    "frecuencia": "1 comprimido diario (Noche con la cena)",
+    "horario": "21:00 hs",
+    "indicacion": "Tratamiento basal inmunomodulador de LES • Reumatología (Dra. Ferreira)",
+    "categoria": "Inmunomodulador",
+    "tomadoHoy": true,
+    "proximoControl": "Fondo de ojo y campo visual 10-2 anual"
+  },
+  {
+    "id": "med-2",
+    "nombre": "Meprednisona",
+    "dosis": "5 mg",
+    "presentacion": "Comprimido matutino",
+    "frecuencia": "Dosis límite diaria matutina con desayuno",
+    "horario": "08:00 hs",
+    "indicacion": "Corticosteroide antiinflamatorio sistémico • No suspender bruscamente",
+    "categoria": "Corticosteroide",
+    "tomadoHoy": false,
+    "proximoControl": "Control de glucemia y tensión arterial"
+  },
+  {
+    "id": "med-3",
+    "nombre": "Micofenolato Mofetilo (CellCept)",
+    "dosis": "500 mg",
+    "presentacion": "Cápsulas",
+    "frecuencia": "Cada 12 horas (Mañana y Noche)",
+    "horario": "09:00 y 21:00 hs",
+    "indicacion": "Inmunosupresor para preservación renal y remisión de nefritis • Hosp. Posadas",
+    "categoria": "Inmunosupresor",
+    "tomadoHoy": true,
+    "proximoControl": "Hemograma completo y enzimas hepáticas c/60 días"
+  },
+  {
+    "id": "med-4",
+    "nombre": "Calcio 600 mg + Vitamina D3 400 UI",
+    "dosis": "1 comprimido masticable",
+    "presentacion": "Comprimidos",
+    "frecuencia": "1 vez al día con el almuerzo",
+    "horario": "13:00 hs",
+    "indicacion": "Prevención de osteoporosis inducida por corticoides y fotoprotección estricta",
+    "categoria": "Suplemento Osteoprotector",
+    "tomadoHoy": true,
+    "proximoControl": "Densitometría ósea anual"
+  },
+  {
+    "id": "med-5",
+    "nombre": "Omeprazol",
+    "dosis": "20 mg",
+    "presentacion": "Cápsula gastrorresistente",
+    "frecuencia": "1 vez al día en ayunas (30 min antes del desayuno)",
+    "horario": "07:30 hs",
+    "indicacion": "Gastroprotección por tratamiento corticoideo crónico y polifarmacia",
+    "categoria": "Gastroprotector",
+    "tomadoHoy": false,
+    "proximoControl": "Control médico periódico"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "uid": "patient-1793313080490",
+    "email": "test@paciente.com",
+    "password": "123",
+    "nombre": "Test Paciente",
+    "rol": "paciente",
+    "fechaCreacion": "2026-10-29T22:31:20.490Z"
+  },
+  {
+    "uid": "demo-patient-001",
+    "email": "lucia.fernandez@lupussync.com",
+    "password": "123",
+    "nombre": "Lucía Belén Fernández",
+    "rol": "paciente",
+    "fechaCreacion": "2026-10-28"
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "name": "lupussync",
+  "version": "2.0.0",
+  "description": "LupusSync - Ecosistema eHealth para Acompañamiento en Lupus Eritematoso Sistémico (LES)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "lupus",
+    "ehealth",
+    "hospital-posadas",
+    "tasy",
+    "adherencia-terapeutica"
+  ],
+  "author": "E.E.S.T. N° 2 República Argentina - EACP 2026",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

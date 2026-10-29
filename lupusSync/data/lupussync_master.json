@@ -1,0 +1,304 @@
+{
+  "user": {
+    "uid": "demo-patient-001",
+    "email": "lucia.fernandez@lupussync.com",
+    "nombre": "Lucía Belén Fernández",
+    "dni": "38.452.120",
+    "direccion": "Av. Corrientes 3450, Piso 4 B, CABA",
+    "telefono": "+54 11 4821-9932",
+    "fechaNacimiento": "1994-08-14",
+    "edad": 32,
+    "grupoSanguineo": "A+",
+    "peso": "61.5 kg",
+    "presion": "118/76 mmHg",
+    "pulso": "72 lpm",
+    "temperatura": "36.5 °C",
+    "alergias": "Sulfamidas (Cotrimoxazol/Bactrim - brote cutáneo severo), Penicilina (intolerancia digestiva)",
+    "zonaPrioritaria": "Riñones (Nefritis Lúpica)",
+    "diagnosticoPrincipal": "Lupus Eritematoso Sistémico (LES)",
+    "fechaDiagnostico": "Mayo 2021",
+    "medicoCabecera": "Dra. Leila Romina Ferreira (Reumatología - Hospital Posadas)",
+    "centroAtencion": "Hospital Nacional Profesor Alejandro Posadas",
+    "contactoEmergencia": {
+      "nombre": "Carlos Alberto Fernández",
+      "relacion": "Padre",
+      "telefono": "+54 11 5591-3342"
+    }
+  },
+  "historiaClinica": {
+    "tipoLupus": "Lupus Eritematoso Sistémico (LES)",
+    "criteriosDiagnostico": "Criterios EULAR/ACR 2019: ANA+ (1:640 moteado), Anti-dsDNA+ (42 UI/mL), C3 bajo (82 mg/dL), Rash malar en mariposa fotosensible y Artritis simétrica de manos. En seguimiento por Dra. Leila Romina Ferreira.",
+    "compromisoOrganico": [
+      "Zona prioritaria de cuidado: Riñones (Nefritis Lúpica)",
+      "Articular: Poliartritis episódica en manos y muñecas (controlada con HCQ)",
+      "Cutáneo: Rash malar fotosensible y lesiones subagudas en escote",
+      "Renal: Nefritis Lúpica Clase II (Mesangial) en remisión sostenida (Hospital Posadas)",
+      "Hematológico: Leve anemia de enfermedad crónica (Hb 11.9 g/dL)",
+      "Cognitivo: Cuadros transitorios de Lupus Fog (niebla mental / lentitud de procesamiento)"
+    ],
+    "alergias": "Sulfamidas (Cotrimoxazol/Bactrim - brote cutáneo severo), Penicilina (intolerancia digestiva)",
+    "antecedentesPersonales": "Tiroiditis autoinmune compensada con Levotiroxina 50 mcg/día.",
+    "antecedentesFamiliares": "Madre con Artritis Reumatoide. Tía materna con Síndrome de Sjögren.",
+    "signosVitalesActuales": {
+      "presion": "118/76 mmHg",
+      "pulso": "72 lpm",
+      "temperatura": "36.5 °C",
+      "peso": "61.5 kg",
+      "fecha": "2026-10-29"
+    },
+    "laboratorioReciente": [
+      {
+        "parametro": "Anticuerpos ANA",
+        "valor": "1:640 (Patrón Moteado)",
+        "fecha": "2026-10-15",
+        "estado": "Positivo",
+        "normal": "< 1:80"
+      },
+      {
+        "parametro": "Anti-dsDNA",
+        "valor": "42 UI/mL",
+        "fecha": "2026-10-15",
+        "estado": "Elevado",
+        "normal": "< 25 UI/mL"
+      },
+      {
+        "parametro": "Complemento C3",
+        "valor": "82 mg/dL",
+        "fecha": "2026-10-15",
+        "estado": "Bajo",
+        "normal": "90 - 180 mg/dL"
+      },
+      {
+        "parametro": "Complemento C4",
+        "valor": "13 mg/dL",
+        "fecha": "2026-10-15",
+        "estado": "Normal-Bajo",
+        "normal": "10 - 40 mg/dL"
+      },
+      {
+        "parametro": "Proteinuria 24hs (TASY)",
+        "valor": "0.18 g/24h",
+        "fecha": "2026-10-15",
+        "estado": "Normal",
+        "normal": "< 0.30 g/24h"
+      },
+      {
+        "parametro": "Hemoglobina",
+        "valor": "11.9 g/dL",
+        "fecha": "2026-10-15",
+        "estado": "Controlado",
+        "normal": "12.0 - 15.5 g/dL"
+      },
+      {
+        "parametro": "Creatinina Plasmática",
+        "valor": "0.85 mg/dL",
+        "fecha": "2026-10-15",
+        "estado": "Normal",
+        "normal": "0.6 - 1.1 mg/dL"
+      }
+    ],
+    "evolucionMedica": "Hospital Posadas - Consultorio de Reumatología (Dra. Leila Romina Ferreira): Paciente en excelente respuesta terapéutica con Hidroxicloroquina 200mg/día y Meprednisona 5mg/día en dosis mínima de mantenimiento. Sin reactivación de eritema malar en los últimos 90 días. Se insiste en fotoprotección FPS 50+ cada 3 horas, control oftalmológico anual de retina y preparación de informe para inserción en sistema TASY."
+  },
+  "medicamentos": [
+    {
+      "id": "med-1",
+      "nombre": "Hidroxicloroquina (Plaquinol)",
+      "dosis": "200 mg",
+      "presentacion": "Comprimidos recubiertos",
+      "frecuencia": "1 comprimido diario (Noche con la cena)",
+      "horario": "21:00 hs",
+      "indicacion": "Tratamiento basal inmunomodulador de LES • Reumatología (Dra. Ferreira)",
+      "categoria": "Inmunomodulador",
+      "tomadoHoy": true,
+      "proximoControl": "Fondo de ojo y campo visual 10-2 anual"
+    },
+    {
+      "id": "med-2",
+      "nombre": "Meprednisona",
+      "dosis": "5 mg",
+      "presentacion": "Comprimido matutino",
+      "frecuencia": "Dosis límite diaria matutina con desayuno",
+      "horario": "08:00 hs",
+      "indicacion": "Corticosteroide antiinflamatorio sistémico • No suspender bruscamente",
+      "categoria": "Corticosteroide",
+      "tomadoHoy": false,
+      "proximoControl": "Control de glucemia y tensión arterial"
+    },
+    {
+      "id": "med-3",
+      "nombre": "Micofenolato Mofetilo (CellCept)",
+      "dosis": "500 mg",
+      "presentacion": "Cápsulas",
+      "frecuencia": "Cada 12 horas (Mañana y Noche)",
+      "horario": "09:00 y 21:00 hs",
+      "indicacion": "Inmunosupresor para preservación renal y remisión de nefritis • Hosp. Posadas",
+      "categoria": "Inmunosupresor",
+      "tomadoHoy": true,
+      "proximoControl": "Hemograma completo y enzimas hepáticas c/60 días"
+    },
+    {
+      "id": "med-4",
+      "nombre": "Calcio 600 mg + Vitamina D3 400 UI",
+      "dosis": "1 comprimido masticable",
+      "presentacion": "Comprimidos",
+      "frecuencia": "1 vez al día con el almuerzo",
+      "horario": "13:00 hs",
+      "indicacion": "Prevención de osteoporosis inducida por corticoides y fotoprotección estricta",
+      "categoria": "Suplemento Osteoprotector",
+      "tomadoHoy": true,
+      "proximoControl": "Densitometría ósea anual"
+    },
+    {
+      "id": "med-5",
+      "nombre": "Omeprazol",
+      "dosis": "20 mg",
+      "presentacion": "Cápsula gastrorresistente",
+      "frecuencia": "1 vez al día en ayunas (30 min antes del desayuno)",
+      "horario": "07:30 hs",
+      "indicacion": "Gastroprotección por tratamiento corticoideo crónico y polifarmacia",
+      "categoria": "Gastroprotector",
+      "tomadoHoy": false,
+      "proximoControl": "Control médico periódico"
+    }
+  ],
+  "turnos": [
+    {
+      "id": "tur-1",
+      "especialidad": "Reumatología",
+      "profesional": "Dra. Leila Romina Ferreira",
+      "centro": "Hospital Nacional Profesor Alejandro Posadas (Consultorios)",
+      "direccion": "Av. Marconi y Pdte. Illia, El Palomar",
+      "fecha": "2026-11-05",
+      "hora": "14:30",
+      "estado": "Pendiente",
+      "recordatorio": "Llevar carnet LupusSync, analíticas de C3/C4 y reporte exportado para TASY."
+    },
+    {
+      "id": "tur-2",
+      "especialidad": "Reumatología",
+      "profesional": "Dr. Gastón Silva",
+      "centro": "Hospital Posadas / Sector Ambulatorio",
+      "direccion": "Av. Marconi y Marconi, El Palomar",
+      "fecha": "2026-11-18",
+      "hora": "16:00",
+      "estado": "Pendiente",
+      "recordatorio": "Control bimensual de mantenimiento y ajuste de dosis corticoide."
+    },
+    {
+      "id": "tur-3",
+      "especialidad": "Oftalmología",
+      "profesional": "Dra. Inés Martínez",
+      "centro": "Instituto Oftalmológico Central",
+      "direccion": "Av. San Juan 2021, CABA",
+      "fecha": "2026-11-26",
+      "hora": "09:15",
+      "estado": "Pendiente",
+      "recordatorio": "Fondo de ojo y campo visual 10-2 por antipalúdicos. Asistir con acompañante por dilatación."
+    },
+    {
+      "id": "tur-4",
+      "especialidad": "Nefrología",
+      "profesional": "Dr. Alejandro Méndez",
+      "centro": "Hospital Posadas / Servicio de Nefrología",
+      "direccion": "Av. Marconi y Pdte. Illia, Piso 3",
+      "fecha": "2026-12-04",
+      "hora": "10:30",
+      "estado": "Pendiente",
+      "recordatorio": "Llevar bidón de recolección de orina de 24 horas y clearance de creatinina."
+    },
+    {
+      "id": "tur-5",
+      "especialidad": "Psiquiatría / Salud Mental",
+      "profesional": "Dr. Martín Echeverría",
+      "centro": "Hospital Posadas / Salud Mental",
+      "direccion": "Av. Marconi y Pdte. Illia, El Palomar",
+      "fecha": "2026-12-11",
+      "hora": "11:00",
+      "estado": "Pendiente",
+      "recordatorio": "Evaluación de soporte cognitivo por episodios de Lupus Fog y compatibilidad psicofarmacológica."
+    },
+    {
+      "id": "tur-6",
+      "especialidad": "Laboratorio Central",
+      "profesional": "Bioq. Gabriela Torres",
+      "centro": "Hospital Posadas - Laboratorio de Análisis Clínicos",
+      "direccion": "Av. Marconi y Pdte. Illia, Planta Baja",
+      "fecha": "2026-12-18",
+      "hora": "07:30",
+      "estado": "Confirmado",
+      "recordatorio": "Ayuno de 12 horas estricto. Llevar muestra de primera orina matutina en frasco estéril."
+    }
+  ],
+  "historialSintomas": [
+    {
+      "id": "sint-1",
+      "fecha": "2026-10-20",
+      "dolorArticular": 3,
+      "nivelFatiga": "Leve",
+      "temperatura": "36.5",
+      "eritemaMalar": false,
+      "fotosensibilidad": false,
+      "articulacionesAfectadas": "Muñeca izquierda leve molestia matutina",
+      "horasSueno": 7.5,
+      "exposicionSolarMin": 10,
+      "notas": "Día tranquilo. Tomé toda la medicación a horario. Buena energía para trabajar."
+    },
+    {
+      "id": "sint-2",
+      "fecha": "2026-10-16",
+      "dolorArticular": 6,
+      "nivelFatiga": "Moderada",
+      "temperatura": "37.1",
+      "eritemaMalar": true,
+      "fotosensibilidad": true,
+      "articulacionesAfectadas": "Nudillos de ambas manos y rodilla derecha",
+      "horasSueno": 5,
+      "exposicionSolarMin": 40,
+      "notas": "Caminata bajo el sol sin sombrero. A las 3 horas noté enrojecimiento en mariposa y mayor rigidez en manos."
+    },
+    {
+      "id": "sint-3",
+      "fecha": "2026-10-10",
+      "dolorArticular": 4,
+      "nivelFatiga": "Severa",
+      "temperatura": "36.8",
+      "eritemaMalar": false,
+      "fotosensibilidad": false,
+      "articulacionesAfectadas": "Tobillos y manos",
+      "horasSueno": 6,
+      "exposicionSolarMin": 5,
+      "notas": "Semana de alta exigencia laboral. Sensación de cansancio abrumador al mediodía."
+    },
+    {
+      "id": "sint-4",
+      "fecha": "2026-10-02",
+      "dolorArticular": 2,
+      "nivelFatiga": "Leve",
+      "temperatura": "36.4",
+      "eritemaMalar": false,
+      "fotosensibilidad": false,
+      "articulacionesAfectadas": "Sin dolor relevante",
+      "horasSueno": 8,
+      "exposicionSolarMin": 15,
+      "notas": "Excelente evolución. Aplicación de protector solar factor 50+ cada 3 horas."
+    }
+  ],
+  "usuarios": [
+    {
+      "uid": "patient-1793313080490",
+      "email": "test@paciente.com",
+      "password": "123",
+      "nombre": "Test Paciente",
+      "rol": "paciente",
+      "fechaCreacion": "2026-10-29T22:31:20.490Z"
+    },
+    {
+      "uid": "demo-patient-001",
+      "email": "lucia.fernandez@lupussync.com",
+      "password": "123",
+      "nombre": "Lucía Belén Fernández",
+      "rol": "paciente",
+      "fechaCreacion": "2026-10-28"
+    }
+  ]
+}
